@@ -1,390 +1,463 @@
-import { useEffect, useMemo, useState } from "react";
-import { api } from "../api/client";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import { useMemo, useState } from "react";
+
+const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
 function Glass({ children, className = "" }) {
   return (
     <div
-      className={`rounded-2xl border border-black/10 dark:border-white/10
-      bg-white/70 dark:bg-white/5 backdrop-blur-xl shadow-lg ${className}`}
+      className={
+        "rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg " +
+        className
+      }
     >
       {children}
     </div>
   );
 }
 
+function Label({ children }) {
+  return <div className="text-xs text-white/60 mb-2">{children}</div>;
+}
 
-function Badge({ trend }) {
-  const text = trend === "up" ? "UP" : trend === "down" ? "DOWN" : "FLAT";
+function Select({ value, onChange, options }) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-white/20"
+    >
+      {options.map((x) => (
+        <option key={x} value={x} className="bg-[#0b0d14]">
+          {x}
+        </option>
+      ))}
+    </select>
+  );
+}
 
-  // Xaridor uchun:
-  // UP (qimmatlashish) = qizil
-  // DOWN (arzonlashish) = yashil
-  const cls =
-    trend === "up"
-      ? "bg-rose-500/20 border-rose-300/20 text-rose-200"
-      : trend === "down"
-      ? "bg-emerald-500/20 border-emerald-300/20 text-emerald-200"
-      : "bg-white/10 border-white/10 text-white/80";
+function Input({ value, onChange, type = "number", min, max, step }) {
+  return (
+    <input
+      type={type}
+      value={value}
+      min={min}
+      max={max}
+      step={step}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-white/20"
+    />
+  );
+}
+
+function TrendBadge({ trend }) {
+  // Sen aytgandek: narx tushsa green (yaxshi), oshsa red (yomon)
+  const t = (trend || "").toLowerCase();
+  const isDown = t === "down";
+  const isUp = t === "up";
+  const label = isUp ? "UP" : isDown ? "DOWN" : "FLAT";
+
+  const cls = isDown
+    ? "border-emerald-400/20 bg-emerald-500/15 text-emerald-200"
+    : isUp
+    ? "border-red-400/20 bg-red-500/15 text-red-200"
+    : "border-white/15 bg-white/5 text-white/80";
 
   return (
-    <span className={`inline-flex items-center px-3 py-1 rounded-full border text-xs font-semibold ${cls}`}>
-      Trend: {text}
+    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs border ${cls}`}>
+      Trend: <span className="ml-1 font-semibold">{label}</span>
     </span>
   );
 }
 
+function formatUZS(x) {
+  if (x == null || Number.isNaN(Number(x))) return "—";
+  try {
+    return new Intl.NumberFormat("uz-UZ").format(Math.round(Number(x))) + " UZS";
+  } catch {
+    return String(x) + " UZS";
+  }
+}
 
-function formatNum(n) {
-  if (n === null || n === undefined || Number.isNaN(n)) return "-";
-  return Math.round(Number(n)).toLocaleString();
+function pct(x) {
+  if (x == null || Number.isNaN(Number(x))) return "—";
+  const v = Number(x);
+  const sign = v > 0 ? "+" : "";
+  return `${sign}${v.toFixed(2)}%`;
+}
+
+/**
+ * Minimal SVG line chart (no libs)
+ * points: array<number>
+ * labels: array<string>
+ */
+function LineChart({ labels = [], points = [] }) {
+  const W = 900;
+  const H = 320;
+  const P = 28;
+
+  const safe = points.map((v) => Number(v)).filter((v) => Number.isFinite(v));
+  const minV = safe.length ? Math.min(...safe) : 0;
+  const maxV = safe.length ? Math.max(...safe) : 1;
+
+  const span = maxV - minV || 1;
+
+  const toX = (i) =>
+    P + (i * (W - P * 2)) / Math.max(1, points.length - 1);
+  const toY = (v) => H - P - ((v - minV) * (H - P * 2)) / span;
+
+  const d = points
+    .map((v, i) => {
+      const x = toX(i);
+      const y = toY(Number(v) || 0);
+      return `${i === 0 ? "M" : "L"} ${x} ${y}`;
+    })
+    .join(" ");
+
+  const lastLabel = labels[labels.length - 1] || "";
+  const firstLabel = labels[0] || "";
+
+  return (
+    <div className="w-full">
+      <div className="flex items-center justify-between text-xs text-white/50 mb-2">
+        <span>{firstLabel}</span>
+        <span>{lastLabel}</span>
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-black/20 p-3 overflow-hidden">
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-60">
+          {/* grid */}
+          {[0, 1, 2, 3].map((k) => {
+            const y = P + (k * (H - P * 2)) / 3;
+            return (
+              <line
+                key={k}
+                x1={P}
+                x2={W - P}
+                y1={y}
+                y2={y}
+                stroke="rgba(255,255,255,0.06)"
+                strokeWidth="2"
+              />
+            );
+          })}
+
+          {/* line */}
+          <path
+            d={d}
+            fill="none"
+            stroke="rgba(255,255,255,0.75)"
+            strokeWidth="3"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+
+          {/* points */}
+          {points.map((v, i) => {
+            const x = toX(i);
+            const y = toY(Number(v) || 0);
+            return (
+              <circle
+                key={i}
+                cx={x}
+                cy={y}
+                r="5"
+                fill="rgba(255,255,255,0.85)"
+                opacity="0.9"
+              />
+            );
+          })}
+        </svg>
+
+        <div className="mt-3 flex items-center justify-between text-xs text-white/60">
+          <div>Min: <span className="text-white/80">{formatUZS(minV)}</span></div>
+          <div>Max: <span className="text-white/80">{formatUZS(maxV)}</span></div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function Demo() {
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [regions, setRegions] = useState([]);
+  // Demo inputs (keyinchalik backend’dan “options” endpoint qilamiz)
+  const categories = ["food", "household"];
+  const productsByCategory = {
+    food: ["flour", "oil", "sugar", "rice", "potato"],
+    household: ["soap", "detergent", "toothpaste", "shampoo"],
+  };
+  const regions = ["Tashkent", "Samarkand", "Andijan", "Namangan", "Bukhara"];
 
-  const [category, setCategory] = useState("");
-  const [product, setProduct] = useState("");
-  const [region, setRegion] = useState("");
-
-  const [horizon, setHorizon] = useState(30);
-  const [historyDays, setHistoryDays] = useState(60);
+  const [category, setCategory] = useState("food");
+  const [product, setProduct] = useState(productsByCategory.food[0]);
+  const [region, setRegion] = useState("Tashkent");
+  const [horizonDays, setHorizonDays] = useState(30);
 
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
-  const [result, setResult] = useState(null);
+  const [data, setData] = useState(null);
 
-  // 1) categories
-  useEffect(() => {
+  const products = useMemo(() => productsByCategory[category] || [], [category]);
+
+  // Ensure product is valid when category changes
+  const onCategoryChange = (c) => {
+    setCategory(c);
+    const list = productsByCategory[c] || [];
+    setProduct(list[0] || "");
+  };
+
+  const computed = useMemo(() => {
+    const labels = data?.chart?.labels || [];
+    const valuesObj = data?.chart?.values || [];
+    const points = valuesObj.map((x) => x?.predicted_price);
+
+    const trend = data?.chart?.trend || "flat";
+    const startPrice = data?.summary?.start_price;
+    const endPrice = data?.summary?.end_price;
+    const changePct = data?.summary?.change_pct;
+
+    return { labels, points, trend, startPrice, endPrice, changePct };
+  }, [data]);
+
+  async function runForecast() {
     setErr("");
-    api
-      .getCategories()
-      .then((data) => {
-        const arr = Array.isArray(data) ? data : [];
-        setCategories(arr);
-        if (arr.length) setCategory(arr[0]);
-      })
-      .catch((e) => setErr(String(e.message || e)));
-  }, []);
-
-  // 2) products when category changes
-  useEffect(() => {
-    if (!category) return;
-    setErr("");
-    setProducts([]);
-    setRegions([]);
-    setProduct("");
-    setRegion("");
-    api
-      .getProducts(category)
-      .then((data) => {
-        const arr = Array.isArray(data) ? data : [];
-        setProducts(arr);
-        if (arr.length) setProduct(arr[0]);
-      })
-      .catch((e) => setErr(String(e.message || e)));
-  }, [category]);
-
-  // 3) regions when product changes
-  useEffect(() => {
-    if (!category || !product) return;
-    setErr("");
-    setRegions([]);
-    setRegion("");
-    api
-      .getRegions(category, product)
-      .then((data) => {
-        const arr = Array.isArray(data) ? data : [];
-        setRegions(arr);
-        if (arr.length) setRegion(arr[0]);
-      })
-      .catch((e) => setErr(String(e.message || e)));
-  }, [category, product]);
-
-  // Build chart data: history + forecast
-  const chartData = useMemo(() => {
-    if (!result?.history || !result?.forecast) return [];
-    const hist = result.history.labels.map((d, idx) => ({
-      date: d,
-      actual: result.history.values[idx]?.price ?? null,
-      predicted: null,
-    }));
-    const fc = result.forecast.labels.map((d, idx) => ({
-      date: d,
-      actual: null,
-      predicted: result.forecast.values[idx]?.predicted_price ?? null,
-    }));
-    return [...hist, ...fc];
-  }, [result]);
-
-  async function onAnalyze() {
-    setErr("");
-    setResult(null);
     setLoading(true);
-
     try {
       const payload = {
         category,
         product,
         region,
-        horizon_days: Number(horizon),
-        history_days: Number(historyDays),
+        horizon_days: Number(horizonDays),
       };
 
-      const res = await api.analyze(payload);
+      const res = await fetch(`${API_BASE}/analyze`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-      if (res?.error) {
-        setErr(res.message || res.error);
-      } else {
-        setResult(res);
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(`API error ${res.status}. ${txt}`.trim());
       }
+
+      const json = await res.json();
+      setData(json);
     } catch (e) {
-      setErr(String(e.message || e));
+      setData(null);
+      setErr(e?.message || "Unknown error");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <div className="mb-6">
-        <h2 className="text-3xl font-bold">Demo</h2>
-        <p className="text-white/70 mt-1">
-          Oziq-ovqat va ro‘zg‘or buyumlari bo‘yicha narx trendini tekshiring.
-        </p>
-      </div>
+    <div className="max-w-6xl mx-auto px-4 py-14 text-white">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <div className="text-sm text-white/60">Demo dashboard</div>
+          <h1 className="mt-2 text-4xl md:text-5xl font-bold">
+            Forecast prices with a clean workflow
+          </h1>
+          <p className="mt-3 text-white/70 max-w-2xl">
+            Select category, product, region, and horizon — get trend, forecast chart, and summary.
+          </p>
+        </div>
 
-      <div className="grid lg:grid-cols-5 gap-4">
-        {/* Left: form */}
-        <Glass className="lg:col-span-2 p-5">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-white/80">Input</div>
-            <div className="text-xs text-white/60">CSV demo</div>
-          </div>
-
-          <div className="mt-4">
-            <label className="text-xs text-white/60">Category</label>
-            <select
-              className="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 outline-none"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              {categories.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mt-3">
-            <label className="text-xs text-white/60">Product</label>
-            <select
-              className="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 outline-none"
-              value={product}
-              onChange={(e) => setProduct(e.target.value)}
-              disabled={!products.length}
-            >
-              {products.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mt-3">
-            <label className="text-xs text-white/60">Region</label>
-            <select
-              className="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 outline-none"
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-              disabled={!regions.length}
-            >
-              {regions.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-xs text-white/60">Horizon (days)</label>
-              <select
-                className="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 outline-none"
-                value={horizon}
-                onChange={(e) => setHorizon(e.target.value)}
-              >
-                {[7, 30, 90, 180, 365].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="text-xs text-white/60">History (days)</label>
-              <select
-                className="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 outline-none"
-                value={historyDays}
-                onChange={(e) => setHistoryDays(e.target.value)}
-              >
-                {[30, 60, 90, 180].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+        <div className="flex gap-3 flex-wrap">
+          <a
+            href={`${API_BASE}/docs`}
+            target="_blank"
+            rel="noreferrer"
+            className="px-5 py-3 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 transition"
+          >
+            API Docs
+          </a>
 
           <button
-            onClick={onAnalyze}
-            disabled={loading || !category || !product || !region}
-            className="mt-5 w-full px-4 py-3 rounded-xl bg-linear-to-r from-teal-500 to-indigo-500 text-black font-semibold disabled:opacity-50"
+            onClick={runForecast}
+            disabled={loading}
+            className="px-6 py-3 rounded-xl bg-linear-to-r from-teal-500 to-indigo-500 text-black font-semibold hover:opacity-90 transition disabled:opacity-60"
           >
-            {loading ? "Analiz qilinyapti..." : "Analiz qilish"}
+            {loading ? "Analyzing..." : "Run forecast"}
           </button>
+        </div>
+      </div>
 
-          {err && (
-            <div className="mt-4 rounded-xl border border-rose-300/20 bg-rose-500/10 p-3 text-sm text-rose-100">
-              {err}
-            </div>
-          )}
-
-          {!err && !result && (
-            <div className="mt-4 text-xs text-white/50">
-              Maslahat: dropdownlardan tanlang va analiz qiling.
-            </div>
-          )}
-        </Glass>
-
-        {/* Right: results */}
-        <Glass className="lg:col-span-3 p-5">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-white/80">Natija</div>
-            {result?.forecast?.trend && <Badge trend={result.forecast.trend} />}
+      {/* Layout */}
+      <div className="mt-10 grid lg:grid-cols-3 gap-6 items-start">
+        {/* Left panel */}
+        <Glass className="p-7 lg:sticky lg:top-24">
+          <div className="text-lg font-semibold">Inputs</div>
+          <div className="text-white/60 text-sm mt-1">
+            Adjust parameters and run the forecast.
           </div>
 
-          {!result && !err && (
-            <div className="mt-10 text-white/60 text-sm">
-              Parametrlarni tanlang va <b>Analiz qilish</b> ni bosing.
+          <div className="mt-6 space-y-5">
+            <div>
+              <Label>Category</Label>
+              <Select value={category} onChange={onCategoryChange} options={categories} />
             </div>
-          )}
 
-          {result && (
-            <>
-              {/* Summary cards */}
-              <div className="mt-4 grid md:grid-cols-3 gap-3">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-xs text-white/60">Oxirgi real narx</div>
-                  <div className="text-2xl font-bold mt-1">
-                    {formatNum(result.summary.last_price)}
-                  </div>
+            <div>
+              <Label>Product</Label>
+              <Select value={product} onChange={setProduct} options={products} />
+            </div>
+
+            <div>
+              <Label>Region</Label>
+              <Select value={region} onChange={setRegion} options={regions} />
+            </div>
+
+            <div>
+              <Label>Horizon (days)</Label>
+              <Input
+                value={horizonDays}
+                onChange={(v) => setHorizonDays(v)}
+                type="number"
+                min={7}
+                max={180}
+                step={1}
+              />
+              <div className="text-xs text-white/50 mt-2">
+                Tip: 30 days is best for a demo.
+              </div>
+            </div>
+
+            {err && (
+              <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-200">
+                <div className="font-semibold">Request failed</div>
+                <div className="mt-1 text-red-200/90">{err}</div>
+                <div className="mt-2 text-red-200/70">
+                  Check backend URL/CORS or open API Docs to verify the endpoint.
                 </div>
+              </div>
+            )}
 
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-xs text-white/60">Prognoz oxiri</div>
-                  <div className="text-2xl font-bold mt-1">
-                    {formatNum(result.summary.end_forecast)}
-                  </div>
-                </div>
+            <button
+              onClick={runForecast}
+              disabled={loading}
+              className="w-full px-6 py-3 rounded-xl bg-linear-to-r from-teal-500 to-indigo-500 text-black font-semibold hover:opacity-90 transition disabled:opacity-60"
+            >
+              {loading ? "Analyzing..." : "Run forecast"}
+            </button>
+          </div>
+        </Glass>
 
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-xs text-white/60">O‘zgarish %</div>
-                  <div className="text-2xl font-bold mt-1">
-                    {result.summary.change_pct}%
-                  </div>
+        {/* Right panel */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Top stats */}
+          <div className="grid md:grid-cols-3 gap-6">
+            <Glass className="p-6">
+              <div className="text-xs text-white/60">Trend</div>
+              <div className="mt-3">
+                <TrendBadge trend={computed.trend} />
+              </div>
+              <div className="mt-3 text-white/60 text-sm">
+                DOWN = good (price dropping)
+              </div>
+            </Glass>
+
+            <Glass className="p-6">
+              <div className="text-xs text-white/60">Start price</div>
+              <div className="mt-2 text-2xl font-bold">
+                {formatUZS(computed.startPrice)}
+              </div>
+              <div className="mt-2 text-white/60 text-sm">
+                for {product} in {region}
+              </div>
+            </Glass>
+
+            <Glass className="p-6">
+              <div className="text-xs text-white/60">Expected change</div>
+              <div className="mt-2 text-2xl font-bold">{pct(computed.changePct)}</div>
+              <div className="mt-2 text-white/60 text-sm">
+                End: {formatUZS(computed.endPrice)}
+              </div>
+            </Glass>
+          </div>
+
+          {/* Chart */}
+          <Glass className="p-7">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div>
+                <div className="text-lg font-semibold">Forecast chart</div>
+                <div className="text-white/60 text-sm mt-1">
+                  Horizon: {horizonDays} days
                 </div>
               </div>
 
-              {/* AI Summary */}
-              {result?.ai && (
-                <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm font-semibold">🤖 AI xulosa</div>
-                    <div className="text-xs text-white/70">
-                      Confidence:{" "}
-                      <span className="font-semibold">
-                        {result.ai.confidence}%
-                      </span>
-                    </div>
-                  </div>
+              <div className="text-xs text-white/50">
+                Source: demo dataset (CSV)
+              </div>
+            </div>
 
-                  <div className="mt-3 h-2 w-full rounded-full bg-white/10 overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-linear-to-r from-teal-500 to-indigo-500"
-                      style={{ width: `${result.ai.confidence}%` }}
-                    />
-                  </div>
-
-                  <div className="mt-3 text-white/80 text-sm leading-relaxed">
-                    {result.ai.summary}
-                  </div>
-
-                  <div className="mt-3 text-xs text-white/60">
-                    Tavsiya:{" "}
-                    <span className="text-white/80">
-                      {result.ai.recommendation}
-                    </span>
-                  </div>
+            <div className="mt-6">
+              {data ? (
+                <LineChart labels={computed.labels} points={computed.points} />
+              ) : (
+                <div className="rounded-2xl border border-white/10 bg-black/20 h-80 flex items-center justify-center text-white/50">
+                  Run forecast to view chart
                 </div>
               )}
+            </div>
+          </Glass>
 
-              {/* Chart */}
-              <div className="mt-5 h-90 rounded-2xl border border-white/10 bg-black/20 p-3">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                    <XAxis dataKey="date" hide />
-                    <YAxis
-                      tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 12 }}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        background: "rgba(0,0,0,0.8)",
-                        border: "1px solid rgba(255,255,255,0.1)",
-                      }}
-                      labelStyle={{ color: "rgba(255,255,255,0.8)" }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="actual"
-                      dot={false}
-                      strokeWidth={2}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="predicted"
-                      dot={false}
-                      strokeWidth={2}
-                      strokeDasharray="6 4"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="mt-3 text-xs text-white/50">
-                Demo prognoz: oddiy linear trend (keyin real modelga
-                almashtiriladi).
-              </div>
-            </>
-          )}
-        </Glass>
+          {/* AI-style summary */}
+          <Glass className="p-7">
+            <div className="text-lg font-semibold">AI-style summary</div>
+            <div className="mt-3 text-white/70 leading-relaxed">
+              {data ? (
+                <SummaryText
+                  trend={computed.trend}
+                  product={product}
+                  region={region}
+                  start={computed.startPrice}
+                  end={computed.endPrice}
+                  changePct={computed.changePct}
+                  horizon={horizonDays}
+                />
+              ) : (
+                "Run forecast to generate a summary."
+              )}
+            </div>
+          </Glass>
+        </div>
       </div>
     </div>
+  );
+}
+
+function SummaryText({ trend, product, region, start, end, changePct, horizon }) {
+  const t = (trend || "").toLowerCase();
+  const isDown = t === "down";
+  const isUp = t === "up";
+
+  const action = isDown ? "Consider waiting or buying later." : isUp ? "Consider buying earlier." : "Monitor the price.";
+
+  return (
+    <>
+      <p>
+        Based on recent signals, <span className="font-semibold">{product}</span> in{" "}
+        <span className="font-semibold">{region}</span> is expected to trend{" "}
+        <span className="font-semibold">
+          {isDown ? "DOWN" : isUp ? "UP" : "FLAT"}
+        </span>{" "}
+        over the next <span className="font-semibold">{horizon}</span> days.
+      </p>
+
+      <p className="mt-3">
+        The forecast moves from <span className="font-semibold">{formatUZS(start)}</span> to{" "}
+        <span className="font-semibold">{formatUZS(end)}</span> (change:{" "}
+        <span className="font-semibold">{pct(changePct)}</span>).
+      </p>
+
+      <p className="mt-3">
+        Recommendation: <span className="font-semibold">{action}</span>
+      </p>
+
+      <p className="mt-3 text-white/50 text-sm">
+        Note: This is a demo baseline forecast. The UI and API contract are designed to support real ML models later.
+      </p>
+    </>
   );
 }
