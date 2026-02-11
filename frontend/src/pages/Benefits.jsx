@@ -1,32 +1,23 @@
+import React from "react";
 import { Link } from "react-router-dom";
-
-function Glass({ children, className = "" }) {
-  return (
-    <div
-      className={
-        "rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg " +
-        className
-      }
-    >
-      {children}
-    </div>
-  );
-}
+import { useTranslation } from "react-i18next";
+import Glass from "../components/Glass";
+import { PrimaryButton } from "../components/Button";
 
 function Card({ title, text }) {
   return (
-    <Glass className="p-6 hover:bg-white/10 transition">
+    <Glass className="p-6">
       <div className="text-lg font-semibold">{title}</div>
-      <div className="text-white/70 text-sm mt-2 leading-relaxed">{text}</div>
+      <div className="mt-2 text-sm text-white/70 dark:text-white/70 text-black/60 leading-relaxed">{text}</div>
     </Glass>
   );
 }
 
-function WhoCard({ title, items }) {
+function ListCard({ title, items }) {
   return (
     <Glass className="p-6">
       <div className="text-lg font-semibold">{title}</div>
-      <ul className="mt-3 text-white/70 text-sm space-y-2 list-disc list-inside">
+      <ul className="mt-3 text-sm text-white/70 dark:text-white/70 text-black/60 list-disc list-inside space-y-2">
         {items.map((x) => (
           <li key={x}>{x}</li>
         ))}
@@ -35,116 +26,38 @@ function WhoCard({ title, items }) {
   );
 }
 
-function Metric({ label, value, note }) {
-  return (
-    <Glass className="p-6 text-center">
-      <div className="text-white/60 text-sm">{label}</div>
-      <div className="mt-2 text-3xl font-bold">{value}</div>
-      {note && <div className="mt-2 text-white/70 text-sm">{note}</div>}
-    </Glass>
-  );
-}
-
 export default function Benefits() {
+  const { t } = useTranslation();
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16 text-white">
-      {/* HEADER */}
+    <div className="space-y-10">
       <div className="text-center max-w-3xl mx-auto">
-        <div className="text-sm text-white/60">Benefits</div>
-
-        <h1 className="mt-4 text-4xl md:text-5xl font-bold">
-          Better decisions, less waste, lower risk
-        </h1>
-
-        <p className="mt-4 text-white/70 text-lg">
-          PriceForecast helps users understand price direction early and take action.
-          Even a baseline forecast can reduce overspending and improve timing.
-        </p>
+        <div className="text-sm text-white/60 dark:text-white/60 text-black/60">Benefits</div>
+        <h1 className="mt-4 text-4xl md:text-5xl font-bold">{t("benefits.title")}</h1>
+        <p className="mt-4 text-white/70 dark:text-white/70 text-black/60 text-lg">{t("benefits.subtitle")}</p>
       </div>
 
-      {/* QUICK VALUE METRICS (DEMO) */}
-      <div className="grid md:grid-cols-3 gap-6 mt-16">
-        <Metric label="Decision speed" value="Seconds" note="Simple trend + chart + summary." />
-        <Metric label="Risk reduction" value="Higher" note="Avoid buying at price peaks." />
-        <Metric label="Planning horizon" value="7–90 days" note="Short-term forecasts for practical use." />
+      <div className="grid md:grid-cols-3 gap-6">
+        <Card title={"💸 " + t("benefits.coreA")} text={t("benefits.coreAText")} />
+        <Card title={"📦 " + t("benefits.coreB")} text={t("benefits.coreBText")} />
+        <Card title={"🧠 " + t("benefits.coreC")} text={t("benefits.coreCText")} />
       </div>
 
-      {/* CORE BENEFITS */}
-      <div className="grid md:grid-cols-3 gap-6 mt-12">
-        <Card
-          title="💸 Save money"
-          text="Buy when prices are expected to be lower and avoid peak periods whenever possible."
+      <div className="grid lg:grid-cols-2 gap-6">
+        <ListCard
+          title={t("benefits.households")}
+          items={["Plan shopping with less uncertainty", "Avoid peak prices", "Compare regions quickly"]}
         />
-        <Card
-          title="📦 Smarter stocking"
-          text="Small shops can decide when to restock inventory based on predicted price movement."
-        />
-        <Card
-          title="🧠 Confidence & clarity"
-          text="Instead of guessing, users see a clear chart and explanation of what’s happening."
+        <ListCard
+          title={t("benefits.businesses")}
+          items={["Reduce inventory risk", "Choose restock timing", "Monitor key products"]}
         />
       </div>
 
-      {/* WHO IT HELPS */}
-      <div className="mt-20 grid lg:grid-cols-2 gap-6">
-        <WhoCard
-          title="For households"
-          items={[
-            "Plan monthly shopping with less uncertainty",
-            "Compare regions and products quickly",
-            "Avoid impulse buys during spikes",
-            "Understand trend direction (up/down)",
-          ]}
-        />
-
-        <WhoCard
-          title="For small businesses"
-          items={[
-            "Reduce inventory risk and sudden cost increases",
-            "Choose restock timing based on trend signals",
-            "Monitor key products across regions",
-            "Use forecasts for pricing strategy",
-          ]}
-        />
-      </div>
-
-      {/* USE CASES */}
-      <div className="mt-20">
-        <h2 className="text-2xl md:text-3xl font-bold text-center">
-          Example use-cases
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-6 mt-10">
-          <Card
-            title="Household planning"
-            text="If flour is trending up, a family may buy earlier to avoid higher prices later."
-          />
-          <Card
-            title="Shop restocking"
-            text="If oil is trending down, a shop may wait a few days to restock at a better price."
-          />
-          <Card
-            title="Regional comparison"
-            text="Users can compare Tashkent vs other regions to identify better purchase opportunities."
-          />
-        </div>
-      </div>
-
-      {/* CTA */}
-      <div className="text-center mt-20">
-        <Glass className="p-10">
-          <h2 className="text-3xl font-bold">Try it now</h2>
-          <p className="mt-3 text-white/70">
-            Open the demo and see trend + forecast + summary for your product.
-          </p>
-
-          <Link
-            to="/demo"
-            className="inline-block mt-6 px-8 py-4 rounded-xl bg-linear-to-r from-teal-500 to-indigo-500 text-black font-semibold hover:opacity-90"
-          >
-            🚀 Open Demo
-          </Link>
-        </Glass>
+      <div className="text-center">
+        <Link to="/demo">
+          <PrimaryButton>{t("common.openDemo")}</PrimaryButton>
+        </Link>
       </div>
     </div>
   );

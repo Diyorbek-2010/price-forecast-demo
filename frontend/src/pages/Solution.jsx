@@ -1,136 +1,65 @@
+import React from "react";
 import { Link } from "react-router-dom";
-
-function Glass({ children, className = "" }) {
-  return (
-    <div
-      className={
-        "rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg " +
-        className
-      }
-    >
-      {children}
-    </div>
-  );
-}
+import { useTranslation } from "react-i18next";
+import Glass from "../components/Glass";
+import { PrimaryButton } from "../components/Button";
 
 function Card({ title, text }) {
   return (
-    <Glass className="p-6 hover:bg-white/10 transition">
+    <Glass className="p-6">
       <div className="text-lg font-semibold">{title}</div>
-      <div className="text-white/70 text-sm mt-2 leading-relaxed">{text}</div>
+      <div className="mt-2 text-sm text-white/70 dark:text-white/70 text-black/60 leading-relaxed">{text}</div>
     </Glass>
   );
 }
 
-function Pill({ children }) {
-  return (
-    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs border border-white/10 bg-white/5 text-white/80">
-      {children}
-    </span>
-  );
-}
-
 export default function Solution() {
+  const { t } = useTranslation();
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16 text-white">
-      {/* HEADER */}
+    <div className="space-y-10">
       <div className="text-center max-w-3xl mx-auto">
-        <div className="text-sm text-white/60">Solution</div>
-
-        <h1 className="mt-4 text-4xl md:text-5xl font-bold">
-          A single dashboard: forecast, trend, and explanation
-        </h1>
-
-        <p className="mt-4 text-white/70 text-lg">
-          PriceForecast turns historical price data into clear signals: where the
-          price is going, how fast it may change, and what action to take.
-        </p>
-
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <Pill>Trend signal</Pill>
-          <Pill>Forecast chart</Pill>
-          <Pill>AI-style summary</Pill>
-          <Pill>Region-based</Pill>
-        </div>
+        <div className="text-sm text-white/60 dark:text-white/60 text-black/60">Solution</div>
+        <h1 className="mt-4 text-4xl md:text-5xl font-bold">{t("solution.title")}</h1>
+        <p className="mt-4 text-white/70 dark:text-white/70 text-black/60 text-lg">{t("solution.subtitle")}</p>
       </div>
 
-      {/* WHAT WE PROVIDE */}
-      <div className="grid md:grid-cols-3 gap-6 mt-16">
-        <Card
-          title="📈 Forecast chart"
-          text="See historical prices and the predicted trajectory for the next 7/30/90 days."
-        />
-        <Card
-          title="🧠 AI-style explanation"
-          text="A human-friendly summary that describes the trend and possible drivers (seasonality, demand, etc.)."
-        />
-        <Card
-          title="🎯 Recommendation"
-          text="A simple suggestion: buy now, wait, or monitor — supported by a confidence estimate."
-        />
+      <div className="grid md:grid-cols-3 gap-6">
+        <Card title={"📈 " + t("solution.provideA")} text={t("solution.provideAText")} />
+        <Card title={"🧠 " + t("solution.provideB")} text={t("solution.provideBText")} />
+        <Card title={"🎯 " + t("solution.provideC")} text={t("solution.provideCText")} />
       </div>
 
-      {/* HOW IT FEELS (UX) */}
-      <div className="mt-20 grid lg:grid-cols-2 gap-6 items-stretch">
+      <div className="grid lg:grid-cols-2 gap-6">
         <Glass className="p-8">
-          <h2 className="text-2xl font-bold">Designed for fast decisions</h2>
-          <p className="mt-3 text-white/70 leading-relaxed">
-            The goal is not to overwhelm users with complex analytics. Instead,
-            we provide a clear “direction + chart + summary” workflow that anyone
-            can understand in seconds.
-          </p>
-
-          <ul className="mt-5 text-white/70 text-sm space-y-2 list-disc list-inside">
+          <h2 className="text-2xl font-bold">{t("solution.fastTitle")}</h2>
+          <p className="mt-3 text-white/70 dark:text-white/70 text-black/60 leading-relaxed">{t("solution.fastText")}</p>
+          <ul className="mt-5 text-sm text-white/70 dark:text-white/70 text-black/60 list-disc list-inside space-y-2">
             <li>Choose product and region</li>
-            <li>Pick forecast horizon</li>
-            <li>Get chart + trend + summary instantly</li>
+            <li>Pick horizon</li>
+            <li>Get chart + trend + summary</li>
           </ul>
-
-          <div className="mt-6 flex gap-3 flex-wrap">
-            <span className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white/80">
-              Simple UI
-            </span>
-            <span className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white/80">
-              Clear outputs
-            </span>
-            <span className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white/80">
-              Actionable insight
-            </span>
-          </div>
         </Glass>
 
         <Glass className="p-8">
-          <h2 className="text-2xl font-bold">Demo today, real ML tomorrow</h2>
-          <p className="mt-3 text-white/70 leading-relaxed">
-            Today’s demo uses curated CSV data and a baseline forecasting logic.
-            The architecture is built so we can replace the baseline with real ML
-            models and real-time data sources later.
-          </p>
-
-          <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
-            <div className="text-sm text-white/60">Planned upgrades</div>
-            <div className="mt-2 grid gap-2 text-white/70 text-sm">
-              <div>• Live data ingestion (APIs / scraping)</div>
-              <div>• ML forecasting models (Prophet/LSTM/etc.)</div>
-              <div>• Better confidence calibration</div>
-              <div>• Alerts: “price likely to rise in 7 days”</div>
+          <h2 className="text-2xl font-bold">{t("solution.demoTitle")}</h2>
+          <p className="mt-3 text-white/70 dark:text-white/70 text-black/60 leading-relaxed">{t("solution.demoText")}</p>
+          <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5
+                          border-black/10 bg-white/60 text-black dark:border-white/10 dark:bg-black/20 dark:text-white">
+            <div className="text-sm text-white/60 dark:text-white/60 text-black/60">Planned upgrades</div>
+            <div className="mt-2 text-sm text-white/70 dark:text-white/70 text-black/60 space-y-2">
+              <div>• Live data ingestion</div>
+              <div>• ML forecasting models</div>
+              <div>• Confidence intervals</div>
+              <div>• Alerts & watchlists</div>
             </div>
           </div>
         </Glass>
       </div>
 
-      {/* CTA */}
-      <div className="text-center mt-20">
-        <h2 className="text-3xl font-bold">See it in action</h2>
-        <p className="text-white/70 mt-3">
-          Try the demo flow and view the forecast chart + summary.
-        </p>
-
-        <Link
-          to="/demo"
-          className="inline-block mt-6 px-8 py-4 rounded-xl bg-linear-to-r from-teal-500 to-indigo-500 text-black font-semibold hover:opacity-90"
-        >
-          🚀 Open Demo
+      <div className="text-center">
+        <Link to="/demo">
+          <PrimaryButton>{t("common.openDemo")}</PrimaryButton>
         </Link>
       </div>
     </div>

@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+/* App base */
+:root {
+  color-scheme: dark;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+/* Smooth transitions for theme */
+* {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}

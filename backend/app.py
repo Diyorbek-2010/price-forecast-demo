@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from datetime import timedelta
-from typing import Tuple, Dict, Any
+from typing import Tuple, Dict, Any, List
 
 import numpy as np
 import pandas as pd
@@ -13,9 +13,8 @@ from fastapi.middleware.cors import CORSMiddleware
 # =========================
 # App
 # =========================
-app = FastAPI(title="Price Forecast Demo API", version="1.0.0")
+app = FastAPI(title="Price Forecast Demo API", version="1.1.0")
 
-# Frontend (Vite) uchun qulay CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "*"],
@@ -35,37 +34,44 @@ if not DATA_PATH.exists():
 if DATA_PATH.stat().st_size == 0:
     raise RuntimeError(f"CSV bo‘sh (0 bayt): {DATA_PATH}")
 
-# CSV o‘qish: separator/encoding muammolariga chidamli
 try:
     df = pd.read_csv(DATA_PATH)
 except Exception:
     df = pd.read_csv(DATA_PATH, sep=";", encoding="utf-8", engine="python")
 
-# Majburiy ustunlar
 required_cols = {"date", "category", "product", "region", "price"}
 missing = required_cols - set(df.columns)
 if missing:
     raise RuntimeError(f"CSV ustunlari yetishmayapti: {sorted(missing)}")
 
-# Tiplarni tozalash
 df["date"] = pd.to_datetime(df["date"], errors="coerce")
 df["price"] = pd.to_numeric(df["price"], errors="coerce")
 
 df = df.dropna(subset=["date", "category", "product", "region", "price"])
 df = df[df["price"] > 0]
 
-# Ichkarida stringlarni bir xil ko‘rinishga keltiramiz
 for col in ["category", "product", "region"]:
     df[col] = df[col].astype(str).str.strip()
+
 
 # =========================
 # Helpers
 # =========================
-def simple_forecast_linear(series: pd.Series, days: int) -> list[float] | None:
+def build_daily_series(filtered: pd.DataFrame) -> pd.DataFrame:
+    """Bir kunda bir nechta narx bo'lsa, o'rtacha qilib birlashtiramiz."""
+    daily = (
+        filtered.groupby("date", as_index=False)["price"]
+        .mean()
+        .sort_values("date")
+        .reset_index(drop=True)
+    )
+    return daily
+
+
+def simple_forecast_linear_noisy(series: pd.Series, days: int, noise_level: float = 0.004) -> List[float] | None:
     """
-    Demo uchun oddiy linear trend forecast.
-    series: tarixiy narxlar (oxirgi N nuqta)
-    days: kelajak kunlar soni
+    Demo uchun linear trend + kichik tebranish (noise).
+    noise_level: 0.004 => +/-0.4% atrofida tebranish
     """
     y = series.values.astype(float)
     if len(y) < 10:
@@ -77,55 +83,71 @@ def simple_forecast_linear(series: pd.Series, days: int) -> list[float] | None:
     slope, intercept = np.polyfit(x, y, 1)
 
     last_x = x[-1]
+    last_price = float(y[-1])
+
     future = []
+    prev = last_price
+
     for i in range(1, days + 1):
-        pred = slope * (last_x + i) + intercept
-        future.append(float(max(pred, 0.0)))
+        base_pred = slope * (last_x + i) + intercept
+        base_pred = float(max(base_pred, 0.00001))
+
+        # base pred ni previousga yaqinlashtirib "smooth" qilamiz
+        # bu realistik ko'rinish beradi (har kuni sakrab ketmaydi)
+        blended = 0.55 * base_pred + 0.45 * prev
+
+        # noise: +/- noise_level
+        noise = float(np.random.uniform(-noise_level, noise_level))
+        pred = blended * (1.0 + noise)
+
+        # narx manfiy bo'lib ketmasin
+        pred = float(max(pred, 0.01))
+
+        future.append(round(pred, 2))
+        prev = pred
+
     return future
 
 
-def ai_summary_text(trend: str, change_pct: float, horizon_days: int) -> Tuple[str, int, str]:
+def ai_summary_text(trend: str, change_pct: float, horizon_days: int, product: str, region: str) -> Tuple[str, int, str]:
     """
-    Demo uchun fake AI: summary + confidence + recommendation.
+    Confirmed "xarid qil / kut / odatdagidek" ko'rinishidagi AI xulosa.
     """
     abs_cp = abs(change_pct)
-
-    # O'zgarish kuchli bo'lsa confidence yuqoriroq
     confidence = int(min(92, max(55, 55 + abs_cp * 3)))
+
+    product = product.strip()
+    region = region.strip()
 
     if trend == "up":
         summary = (
-            f"Narx oshish trendida. Keyingi {horizon_days} kunda taxminan "
-            f"{abs_cp:.1f}% atrofida ko‘tarilishi kutilmoqda."
+            f"{product} ({region}) narxi oshish trendida. Keyingi {horizon_days} kunda "
+            f"taxminan {abs_cp:.1f}% atrofida ko‘tarilishi kutilmoqda."
         )
-        recommendation = "Agar zaxira kerak bo‘lsa, erta xarid qilish foydali bo‘lishi mumkin."
+        recommendation = "Tavsiya: agar yaqin kunlarda kerak bo‘lsa, hozirdan olish foydali."
     elif trend == "down":
         summary = (
-            f"Narx pasayish trendida. Keyingi {horizon_days} kunda taxminan "
-            f"{abs_cp:.1f}% atrofida tushishi kutilmoqda."
+            f"{product} ({region}) narxi pasayish trendida. Keyingi {horizon_days} kunda "
+            f"taxminan {abs_cp:.1f}% atrofida tushishi kutilmoqda."
         )
-        recommendation = "Agar shoshilinch bo‘lmasa, biroz kutish tejamkor bo‘lishi mumkin."
+        recommendation = "Tavsiya: shoshilinch bo‘lmasa, biroz kutib xarid qilish ma’qul."
     else:
         summary = (
-            f"Narx barqaror ko‘rinmoqda. Keyingi {horizon_days} kunda katta o‘zgarish "
-            f"kutilmayapti (taxminan {abs_cp:.1f}%)."
+            f"{product} ({region}) narxi barqaror ko‘rinmoqda. Keyingi {horizon_days} kunda "
+            f"katta o‘zgarish kutilmayapti (≈ {abs_cp:.1f}%)."
         )
-        recommendation = "Barqaror holat: odatiy xarid rejasiga amal qilish mumkin."
+        recommendation = "Tavsiya: odatdagi reja bo‘yicha xarid qilsangiz bo‘ladi."
 
     return summary, confidence, recommendation
 
 
-def build_daily_series(filtered: pd.DataFrame) -> pd.DataFrame:
-    """
-    Bir kunda bir nechta narx bo'lsa, o'rtacha qilib birlashtiramiz.
-    """
-    daily = (
-        filtered.groupby("date", as_index=False)["price"]
-        .mean()
-        .sort_values("date")
-        .reset_index(drop=True)
-    )
-    return daily
+def trend_color(trend: str) -> str:
+    # frontendga qulay: UP=green, DOWN=red, FLAT=gray
+    if trend == "up":
+        return "green"
+    if trend == "down":
+        return "red"
+    return "gray"
 
 
 # =========================
@@ -155,12 +177,6 @@ def get_regions(category: str, product: str) -> list[str]:
 # =========================
 @app.post("/analyze")
 def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Demo analyze:
-    - category/product/region bo'yicha filtr
-    - history_days: oxirgi N kunni ko'rsatish
-    - horizon_days: kelajak N kun prognoz
-    """
     category = str(payload.get("category", "")).strip()
     product = str(payload.get("product", "")).strip()
     region = str(payload.get("region", "")).strip()
@@ -194,7 +210,8 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
     history = daily.tail(history_days).copy()
     series = history["price"]
 
-    forecast_vals = simple_forecast_linear(series, horizon_days)
+    # ✅ noisy + smooth linear forecast
+    forecast_vals = simple_forecast_linear_noisy(series, horizon_days, noise_level=0.0004)
     if forecast_vals is None:
         return {"error": "forecast_error", "message": "Forecast hisoblashda muammo (data juda kam bo‘lishi mumkin)"}
 
@@ -204,22 +221,31 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
         for i in range(1, horizon_days + 1)
     ]
 
+    # ✅ CHART FIX: values endi float array (frontend chart uchun)
     history_labels = history["date"].dt.strftime("%Y-%m-%d").tolist()
-    history_values = [{"price": float(x)} for x in history["price"].tolist()]
-    forecast_values = [{"predicted_price": float(x)} for x in forecast_vals]
+    history_values = [float(x) for x in history["price"].tolist()]
 
-    last_price = float(history_values[-1]["price"])
-    end_forecast = float(forecast_values[-1]["predicted_price"])
+    forecast_labels = forecast_dates
+    forecast_values = [float(x) for x in forecast_vals]
+
+    last_price = float(history_values[-1])
+    end_forecast = float(forecast_values[-1])
 
     change_pct = ((end_forecast - last_price) / last_price) * 100.0
 
     trend = "flat"
-    if end_forecast > last_price:
+    if end_forecast > last_price * 1.0005:
         trend = "up"
-    elif end_forecast < last_price:
+    elif end_forecast < last_price * 0.9995:
         trend = "down"
 
-    ai_summary, confidence, recommendation = ai_summary_text(trend, change_pct, horizon_days)
+    ai_summary, confidence, recommendation = ai_summary_text(
+        trend=trend,
+        change_pct=change_pct,
+        horizon_days=horizon_days,
+        product=product,
+        region=region,
+    )
 
     return {
         "meta": {
@@ -231,16 +257,17 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
         },
         "history": {
             "labels": history_labels,
-            "values": history_values,
+            "values": history_values,   # ✅ float[]
         },
         "forecast": {
-            "labels": forecast_dates,
-            "values": forecast_values,
+            "labels": forecast_labels,
+            "values": forecast_values,  # ✅ float[]
             "trend": trend,
+            "trend_color": trend_color(trend),  # optional
         },
         "summary": {
-            "last_price": last_price,
-            "end_forecast": end_forecast,
+            "last_price": round(last_price, 2),
+            "end_forecast": round(end_forecast, 2),
             "change_pct": round(change_pct, 2),
         },
         "ai": {

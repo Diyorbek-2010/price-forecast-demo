@@ -1,101 +1,44 @@
+import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import Glass from "../components/Glass";
+import { PrimaryButton } from "../components/Button";
 
-function Glass({ children, className = "" }) {
+function Item({ q, a }) {
   return (
-    <div
-      className={
-        "rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg " +
-        className
-      }
-    >
-      {children}
-    </div>
-  );
-}
-
-function FAQItem({ q, a }) {
-  return (
-    <details className="group rounded-2xl border border-white/10 bg-white/5 p-5">
+    <details className="group rounded-2xl border border-white/10 bg-white/5 p-5
+                        border-black/10 bg-white/70 text-black dark:border-white/10 dark:bg-white/5 dark:text-white">
       <summary className="cursor-pointer list-none flex items-center justify-between gap-4">
         <span className="font-semibold">{q}</span>
-        <span className="text-white/60 group-open:rotate-180 transition">⌄</span>
+        <span className="opacity-60 group-open:rotate-180 transition">⌄</span>
       </summary>
-      <p className="mt-3 text-white/70 text-sm leading-relaxed">{a}</p>
+      <p className="mt-3 text-sm text-white/70 dark:text-white/70 text-black/60 leading-relaxed">{a}</p>
     </details>
   );
 }
 
 export default function FAQ() {
+  const { t } = useTranslation();
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16 text-white">
-      {/* HEADER */}
+    <div className="space-y-10">
       <div className="text-center max-w-3xl mx-auto">
-        <div className="text-sm text-white/60">FAQ</div>
-
-        <h1 className="mt-4 text-4xl md:text-5xl font-bold">
-          Frequently asked questions
-        </h1>
-
-        <p className="mt-4 text-white/70 text-lg">
-          Quick answers about the demo and how it evolves into a real AI forecasting product.
-        </p>
+        <div className="text-sm text-white/60 dark:text-white/60 text-black/60">FAQ</div>
+        <h1 className="mt-4 text-4xl md:text-5xl font-bold">{t("faq.title")}</h1>
+        <p className="mt-4 text-white/70 dark:text-white/70 text-black/60 text-lg">{t("faq.subtitle")}</p>
       </div>
 
-      {/* FAQ LIST */}
-      <div className="mt-16 grid gap-4 max-w-3xl mx-auto">
-        <FAQItem
-          q="Is this real AI?"
-          a="The current version is a demo that mimics an AI workflow using a baseline forecasting logic and curated CSV data. The architecture is designed to replace the baseline with real ML models later."
-        />
-        <FAQItem
-          q="Where does the data come from?"
-          a="For the demo, data comes from a curated dataset. The next step is real-time ingestion from APIs or reliable public sources, plus automated cleaning and normalization."
-        />
-        <FAQItem
-          q="Can it predict prices perfectly?"
-          a="No forecasting model is perfect. The goal is to provide direction, context, and confidence — not absolute certainty. Real ML models will improve accuracy over time."
-        />
-        <FAQItem
-          q="What products are supported?"
-          a="The demo focuses on food and household goods (e.g., flour, oil, sugar). More products and categories can be added once data coverage expands."
-        />
-        <FAQItem
-          q="Why do regions matter?"
-          a="Prices vary by region due to logistics, local demand, and supply conditions. Region-based forecasting gives more practical, localized insights."
-        />
-        <FAQItem
-          q="How is trend calculated?"
-          a="We analyze historical prices to estimate direction (UP/DOWN/FLAT) and then project a short-term forecast for the selected horizon."
-        />
-        <FAQItem
-          q="Will you add alerts or notifications?"
-          a="Yes. In the real product, users will be able to watch products and receive alerts like 'price likely to rise in 7 days' with a confidence level."
-        />
-        <FAQItem
-          q="Do you store personal data?"
-          a="In the demo version, there is no user account system and no personal data storage. In production, privacy and security will be part of the core design."
-        />
-        <FAQItem
-          q="Will this be free?"
-          a="The demo is free. A real product could use a freemium model: free basic forecasts and paid advanced analytics, alerts, or business dashboards."
-        />
+      <div className="grid gap-4 max-w-3xl mx-auto">
+        <Item q="Is this real AI?" a="This is a demo baseline. The UI and API are built to support real ML models later." />
+        <Item q="Where does the data come from?" a="Demo uses curated CSV data. Next step is live ingestion from real sources." />
+        <Item q="Can it predict perfectly?" a="No model is perfect. We provide direction + chart + context." />
+        <Item q="Will you add alerts?" a="Yes. Watchlists and notifications are planned for the real product." />
       </div>
 
-      {/* CTA */}
-      <div className="text-center mt-20">
-        <Glass className="p-10">
-          <h2 className="text-3xl font-bold">Still curious?</h2>
-          <p className="mt-3 text-white/70">
-            Open the demo and explore the forecast chart + summary.
-          </p>
-
-          <Link
-            to="/demo"
-            className="inline-block mt-6 px-8 py-4 rounded-xl bg-linear-to-r from-teal-500 to-indigo-500 text-black font-semibold hover:opacity-90"
-          >
-            🚀 Open Demo
-          </Link>
-        </Glass>
+      <div className="text-center">
+        <Link to="/demo">
+          <PrimaryButton>{t("common.openDemo")}</PrimaryButton>
+        </Link>
       </div>
     </div>
   );

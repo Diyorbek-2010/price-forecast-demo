@@ -1,231 +1,373 @@
-import { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
-function Glass({ children, className = "" }) {
+/**
+ * 1) KO‘RINADIGAN NOMLARNI O‘ZBEKCHA QILISH UCHUN LUG‘AT
+ * Backendga baribir asl qiymat (masalan "flour") ketadi.
+ */
+const CATEGORY_UZ = {
+  food: "Oziq-ovqat",
+  household: "Ro‘zg‘or buyumlari",
+};
+
+const PRODUCT_UZ = {
+  flour: "Un",
+  eggs: "Tuxum",
+  rice: "Guruch",
+  sugar: "Shakar",
+  oil: "O‘simlik yog‘i",
+  milk: "Sut",
+  bread: "Non",
+  meat: "Go‘sht",
+  // household
+  soap: "Sovun",
+  detergent: "Kir yuvish kukuni",
+  shampoo: "Shampun",
+  toothpaste: "Tish pastasi",
+  tissue: "Salfetka",
+  toilet_paper: "Tualet qog‘ozi",
+};
+
+const REGION_UZ = {
+  Tashkent: "Toshkent",
+  Samarkand: "Samarqand",
+  Bukhara: "Buxoro",
+  Andijan: "Andijon",
+  Fergana: "Farg‘ona",
+  Namangan: "Namangan",
+  Khorezm: "Xorazm",
+  Karakalpakstan: "Qoraqalpog‘iston",
+};
+function DemoVideo() {
+  const YT_EMBED =
+    "https://www.youtube.com/embed/4N-WFXpBjpc?rel=0&modestbranding=1";
+
   return (
-    <div
-      className={
-        "rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg " +
-        className
-      }
-    >
-      {children}
+    <div className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          minHeight: "520px", // ✅ videoni ko‘zga katta qiladi
+        }}
+      >
+        <iframe
+          src={YT_EMBED}
+          title="BazaarAI Demo Video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      </div>
     </div>
   );
 }
 
-function Label({ children }) {
-  return <div className="text-xs text-white/60 mb-2">{children}</div>;
-}
 
-function Select({ value, onChange, options }) {
+function DemoAnalysis() {
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-white/20"
+    <div
+      className="rounded-3xl border border-white/10 bg-white/5 p-6"
+      style={{ flex: "1 1 auto" }} // ✅ qolgan joy tahlilga
     >
-      {options.map((x) => (
-        <option key={x} value={x} className="bg-[#0b0d14]">
-          {x}
-        </option>
-      ))}
-    </select>
-  );
-}
+      <h2 className="text-2xl font-semibold text-white">
+        BazaarAI — Aqlli Mahsulot Narxini Bashorat Qilish Platformasi
+      </h2>
 
-function Input({ value, onChange, type = "number", min, max, step }) {
-  return (
-    <input
-      type={type}
-      value={value}
-      min={min}
-      max={max}
-      step={step}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none focus:border-white/20"
-    />
-  );
-}
+      <div className="mt-4 space-y-4">
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+          <h3 className="text-white font-semibold">Videoda nima ko‘rsatilgan</h3>
+          <p className="mt-2 text-white/75 leading-relaxed">
+            Ushbu videoda BazaarAI platformasining to‘liq ishlash jarayoni namoyish etiladi.
+            Foydalanuvchi tizimga mahsulot turini (masalan: guruch, bug‘doy, paxta, kartoshka,
+            piyoz, pomidor, go‘sht, sut mahsulotlari, shakar, yog‘, sement, metall va boshqa
+            iste’mol hamda sanoat tovarlari) tanlaydi va tegishli ma’lumotlarni kiritadi.
+            Platforma avtomatik ravishda tarixiy narxlar, savdo hajmi, mavsumiylik, hududiy
+            omillar va bozor dinamikasini tahlil qiladi. AI modeli real vaqt rejimida 7, 30 va
+            90 kunlik narx prognozini hisoblab, o‘sish yoki pasayish ehtimolini foizlarda
+            ko‘rsatadi, risk darajasini baholaydi va ishonchlilik intervalini taqdim etadi.
+            Shuningdek, vizual grafiklar orqali trend va mavsumiy tebranishlar ko‘rsatiladi.
+          </p>
+        </div>
 
-function TrendBadge({ trend }) {
-  // Sen aytgandek: narx tushsa green (yaxshi), oshsa red (yomon)
-  const t = (trend || "").toLowerCase();
-  const isDown = t === "down";
-  const isUp = t === "up";
-  const label = isUp ? "UP" : isDown ? "DOWN" : "FLAT";
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+          <h3 className="text-white font-semibold">Muammo va yechim qanday bog‘liq</h3>
+          <p className="mt-2 text-white/75 leading-relaxed">
+            Bozorda mahsulot narxlarining tez-tez o‘zgarishi savdogarlar va ishlab chiqaruvchilar
+            uchun jiddiy muammo hisoblanadi. Narxning keskin pasayishi zarar keltirishi,
+            noto‘g‘ri vaqtda sotish esa daromadni kamaytirishi mumkin. Ko‘plab kichik va o‘rta
+            biznes subyektlarida analitik vositalar mavjud emasligi sababli qarorlar subyektiv
+            baholash asosida qabul qilinadi. BazaarAI ushbu muammoni ma’lumotlarga asoslangan
+            prognozlash modeli orqali hal qiladi. Platforma talab va taklif dinamikasi, mavsumiy
+            omillar, logistika xarajatlari hamda makroiqtisodiy ko‘rsatkichlarni hisobga olib,
+            aniqroq va asosli narx bashoratini taqdim etadi. Natijada foydalanuvchilar optimal
+            sotish vaqtini aniqlay oladi, zaxira boshqaruvini yaxshilaydi va moliyaviy risklarni
+            kamaytiradi.
+          </p>
+        </div>
 
-  const cls = isDown
-    ? "border-emerald-400/20 bg-emerald-500/15 text-emerald-200"
-    : isUp
-    ? "border-red-400/20 bg-red-500/15 text-red-200"
-    : "border-white/15 bg-white/5 text-white/80";
-
-  return (
-    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs border ${cls}`}>
-      Trend: <span className="ml-1 font-semibold">{label}</span>
-    </span>
-  );
-}
-
-function formatUZS(x) {
-  if (x == null || Number.isNaN(Number(x))) return "—";
-  try {
-    return new Intl.NumberFormat("uz-UZ").format(Math.round(Number(x))) + " UZS";
-  } catch {
-    return String(x) + " UZS";
-  }
-}
-
-function pct(x) {
-  if (x == null || Number.isNaN(Number(x))) return "—";
-  const v = Number(x);
-  const sign = v > 0 ? "+" : "";
-  return `${sign}${v.toFixed(2)}%`;
-}
-
-/**
- * Minimal SVG line chart (no libs)
- * points: array<number>
- * labels: array<string>
- */
-function LineChart({ labels = [], points = [] }) {
-  const W = 900;
-  const H = 320;
-  const P = 28;
-
-  const safe = points.map((v) => Number(v)).filter((v) => Number.isFinite(v));
-  const minV = safe.length ? Math.min(...safe) : 0;
-  const maxV = safe.length ? Math.max(...safe) : 1;
-
-  const span = maxV - minV || 1;
-
-  const toX = (i) =>
-    P + (i * (W - P * 2)) / Math.max(1, points.length - 1);
-  const toY = (v) => H - P - ((v - minV) * (H - P * 2)) / span;
-
-  const d = points
-    .map((v, i) => {
-      const x = toX(i);
-      const y = toY(Number(v) || 0);
-      return `${i === 0 ? "M" : "L"} ${x} ${y}`;
-    })
-    .join(" ");
-
-  const lastLabel = labels[labels.length - 1] || "";
-  const firstLabel = labels[0] || "";
-
-  return (
-    <div className="w-full">
-      <div className="flex items-center justify-between text-xs text-white/50 mb-2">
-        <span>{firstLabel}</span>
-        <span>{lastLabel}</span>
-      </div>
-
-      <div className="rounded-2xl border border-white/10 bg-black/20 p-3 overflow-hidden">
-        <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-60">
-          {/* grid */}
-          {[0, 1, 2, 3].map((k) => {
-            const y = P + (k * (H - P * 2)) / 3;
-            return (
-              <line
-                key={k}
-                x1={P}
-                x2={W - P}
-                y1={y}
-                y2={y}
-                stroke="rgba(255,255,255,0.06)"
-                strokeWidth="2"
-              />
-            );
-          })}
-
-          {/* line */}
-          <path
-            d={d}
-            fill="none"
-            stroke="rgba(255,255,255,0.75)"
-            strokeWidth="3"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
-
-          {/* points */}
-          {points.map((v, i) => {
-            const x = toX(i);
-            const y = toY(Number(v) || 0);
-            return (
-              <circle
-                key={i}
-                cx={x}
-                cy={y}
-                r="5"
-                fill="rgba(255,255,255,0.85)"
-                opacity="0.9"
-              />
-            );
-          })}
-        </svg>
-
-        <div className="mt-3 flex items-center justify-between text-xs text-white/60">
-          <div>Min: <span className="text-white/80">{formatUZS(minV)}</span></div>
-          <div>Max: <span className="text-white/80">{formatUZS(maxV)}</span></div>
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+          <h3 className="text-white font-semibold">Texnologiyalar</h3>
+          <p className="mt-2 text-white/75 leading-relaxed">
+            BazaarAI machine learning arxitekturasi asosida qurilgan. Gradient Boosting Regressor,
+            Random Forest va LSTM kombinatsiyasi, feature engineering (trend, seasonality, moving average,
+            volatility) qo‘llaniladi. Backend: Python + FastAPI. Data: PostgreSQL. Model: Scikit-learn va
+            TensorFlow. REST API orqali prediction xizmatlari beriladi va vizual analitika modulida grafiklar
+            chiqariladi.
+          </p>
         </div>
       </div>
     </div>
   );
 }
 
+
+
+
+function prettyFallback(s) {
+  // unknown kelib qolsa ham chiroyli ko‘rsatish uchun
+  const str = String(s ?? "");
+  if (!str) return "—";
+  return str
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, (m) => m.toUpperCase());
+}
+
+function categoryLabel(c) {
+  return CATEGORY_UZ[c] || prettyFallback(c);
+}
+
+function productLabel(p) {
+  return PRODUCT_UZ[p] || prettyFallback(p);
+}
+
+function regionLabel(r) {
+  return REGION_UZ[r] || prettyFallback(r);
+}
+
+function moneyUZS(n) {
+  const x = Number(n);
+  if (!Number.isFinite(x)) return "—";
+  return new Intl.NumberFormat("uz-UZ").format(x) + " so‘m";
+}
+
+function normalizeForecastValues(valuesRaw) {
+  // backend values float[] bo‘lsa ham, [{predicted_price:...}] bo‘lsa ham ishlaydi
+  if (!Array.isArray(valuesRaw)) return [];
+  return valuesRaw
+    .map((v) => {
+      if (v == null) return null;
+      if (typeof v === "number") return Number.isFinite(v) ? v : null;
+      if (typeof v === "string") {
+        const n = Number(v);
+        return Number.isFinite(n) ? n : null;
+      }
+      if (typeof v === "object") {
+        const n =
+          v.predicted_price ?? v.price ?? v.value ?? v.y ?? v.pred ?? null;
+        const nn = Number(n);
+        return Number.isFinite(nn) ? nn : null;
+      }
+      return null;
+    })
+    .filter((n) => Number.isFinite(n));
+}
+
+function trendStyle(trendRaw) {
+  const t = String(trendRaw || "").toLowerCase();
+  if (t === "up") return { key: "up", label: "OSHDI", color: "#22c55e", dot: "bg-emerald-400" };
+  if (t === "down") return { key: "down", label: "TUSHDI", color: "#ef4444", dot: "bg-rose-400" };
+  return { key: "flat", label: "O‘ZGARMADI", color: "#9ca3af", dot: "bg-slate-300" };
+}
+
+/**
+ * 2) DEPENDENCYSIZ SVG LINE CHART (ishonchli, import muammosi bo‘lmaydi)
+ */
+function SvgLineChart({ labels, values, color = "#22c55e", height = 320 }) {
+  const ok =
+    Array.isArray(labels) &&
+    Array.isArray(values) &&
+    labels.length > 1 &&
+    values.length > 1 &&
+    labels.length === values.length;
+
+  const w = 1000;
+  const h = 320;
+  const pad = 40;
+
+  const { pathD, minV, maxV } = useMemo(() => {
+    if (!ok) return { pathD: "", minV: 0, maxV: 0 };
+    const minVal = Math.min(...values);
+    const maxVal = Math.max(...values);
+    const range = maxVal - minVal || 1;
+
+    const innerW = w - pad * 2;
+    const innerH = h - pad * 2;
+
+    const pts = values.map((v, i) => {
+      const x = pad + (innerW * i) / (values.length - 1);
+      const y = pad + innerH - (innerH * (v - minVal)) / range;
+      return { x, y };
+    });
+
+    const d = pts
+      .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`)
+      .join(" ");
+    return { pathD: d, minV: minVal, maxV: maxVal };
+  }, [ok, values]);
+
+  if (!ok) {
+    return (
+      <div className="h-[320px] flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/70">
+        Grafik uchun ma’lumot kelmadi (labels/values bo‘sh yoki teng emas).
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
+      <svg
+        viewBox={`0 0 ${w} ${h}`}
+        width="100%"
+        height={height}
+        preserveAspectRatio="none"
+      >
+        {/* grid */}
+        <g opacity="0.25">
+          {Array.from({ length: 5 }).map((_, i) => {
+            const y = pad + ((h - pad * 2) * i) / 4;
+            return (
+              <line
+                key={i}
+                x1={pad}
+                x2={w - pad}
+                y1={y}
+                y2={y}
+                stroke="white"
+                strokeWidth="1"
+              />
+            );
+          })}
+        </g>
+
+        <path
+          d={pathD}
+          fill="none"
+          stroke={color}
+          strokeWidth="4"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      </svg>
+
+      <div className="px-4 pb-3 pt-2 flex items-center justify-between text-xs text-white/70">
+        <span>Min: {moneyUZS(minV)}</span>
+        <span>Max: {moneyUZS(maxV)}</span>
+      </div>
+
+      <div className="px-4 pb-4 flex items-center justify-between text-xs text-white/60">
+        <span>{labels[0]}</span>
+        <span>{labels[labels.length - 1]}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function Demo() {
-  // Demo inputs (keyinchalik backend’dan “options” endpoint qilamiz)
-  const categories = ["food", "household"];
-  const productsByCategory = {
-    food: ["flour", "oil", "sugar", "rice", "potato"],
-    household: ["soap", "detergent", "toothpaste", "shampoo"],
-  };
-  const regions = ["Tashkent", "Samarkand", "Andijan", "Namangan", "Bukhara"];
+  // Select options API’dan olinadi
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [regions, setRegions] = useState([]);
 
-  const [category, setCategory] = useState("food");
-  const [product, setProduct] = useState(productsByCategory.food[0]);
-  const [region, setRegion] = useState("Tashkent");
+  // Selected values (backend uchun)
+  const [category, setCategory] = useState("");
+  const [product, setProduct] = useState("");
+  const [region, setRegion] = useState("");
+
   const [horizonDays, setHorizonDays] = useState(30);
-
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
-  const [data, setData] = useState(null);
+  const [result, setResult] = useState(null);
 
-  const products = useMemo(() => productsByCategory[category] || [], [category]);
+  // 1) categories
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fetch(`${API_BASE}/catalog/categories`);
+        const data = await r.json();
+        const list = Array.isArray(data) ? data : [];
+        setCategories(list);
+        const first = list[0] || "";
+        setCategory(first);
+      } catch {
+        setErr("Katalogni olishda xatolik (categories). Backend ishlayaptimi?");
+      }
+    })();
+  }, []);
 
-  // Ensure product is valid when category changes
-  const onCategoryChange = (c) => {
-    setCategory(c);
-    const list = productsByCategory[c] || [];
-    setProduct(list[0] || "");
-  };
+  // 2) products by category
+  useEffect(() => {
+    if (!category) return;
+    (async () => {
+      try {
+        const r = await fetch(`${API_BASE}/catalog/products?category=${encodeURIComponent(category)}`);
+        const data = await r.json();
+        const list = Array.isArray(data) ? data : [];
+        setProducts(list);
+        const first = list[0] || "";
+        setProduct(first);
+      } catch {
+        setErr("Katalogni olishda xatolik (products).");
+      }
+    })();
+  }, [category]);
 
-  const computed = useMemo(() => {
-    const labels = data?.chart?.labels || [];
-    const valuesObj = data?.chart?.values || [];
-    const points = valuesObj.map((x) => x?.predicted_price);
+  // 3) regions by category+product
+  useEffect(() => {
+    if (!category || !product) return;
+    (async () => {
+      try {
+        const r = await fetch(
+          `${API_BASE}/catalog/regions?category=${encodeURIComponent(category)}&product=${encodeURIComponent(product)}`
+        );
+        const data = await r.json();
+        const list = Array.isArray(data) ? data : [];
+        setRegions(list);
+        const first = list[0] || "";
+        setRegion(first);
+      } catch {
+        setErr("Katalogni olishda xatolik (regions).");
+      }
+    })();
+  }, [category, product]);
 
-    const trend = data?.chart?.trend || "flat";
-    const startPrice = data?.summary?.start_price;
-    const endPrice = data?.summary?.end_price;
-    const changePct = data?.summary?.change_pct;
+  const trend = trendStyle(result?.forecast?.trend);
+  const forecastLabels = result?.forecast?.labels ?? [];
+  const forecastValues = normalizeForecastValues(result?.forecast?.values ?? []);
+  const canDraw =
+    Array.isArray(forecastLabels) &&
+    forecastLabels.length > 1 &&
+    forecastLabels.length === forecastValues.length;
 
-    return { labels, points, trend, startPrice, endPrice, changePct };
-  }, [data]);
-
-  async function runForecast() {
+  async function onAnalyze() {
     setErr("");
     setLoading(true);
+    setResult(null);
+
     try {
       const payload = {
         category,
         product,
         region,
-        horizon_days: Number(horizonDays),
+        horizon_days: Number(horizonDays) || 30,
+        history_days: 60,
       };
 
       const res = await fetch(`${API_BASE}/analyze`, {
@@ -234,230 +376,232 @@ export default function Demo() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const txt = await res.text().catch(() => "");
-        throw new Error(`API error ${res.status}. ${txt}`.trim());
+      const data = await res.json();
+
+      if (!res.ok || data?.error) {
+        setErr(data?.message || "Server xatosi");
+        setLoading(false);
+        return;
       }
 
-      const json = await res.json();
-      setData(json);
-    } catch (e) {
-      setData(null);
-      setErr(e?.message || "Unknown error");
+      setResult(data);
+    } catch {
+      setErr("Serverga ulanishda xatolik. Backend ishlayaptimi?");
     } finally {
       setLoading(false);
     }
   }
 
+  const aiSummary = result?.ai?.summary || "—";
+  const aiRec = result?.ai?.recommendation || "—";
+  const conf = result?.ai?.confidence;
+
+  const lastPrice = result?.summary?.last_price;
+  const endForecast = result?.summary?.end_forecast;
+  const changePct = result?.summary?.change_pct;
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-14 text-white">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-        <div>
-          <div className="text-sm text-white/60">Demo dashboard</div>
-          <h1 className="mt-2 text-4xl md:text-5xl font-bold">
-            Forecast prices with a clean workflow
+    <div className="min-h-[calc(100vh-80px)] px-4 py-10">
+      <div className="mx-auto max-w-6xl">
+        <section className="mb-10">
+  <div className="grid gap-6 lg:grid-cols-12 items-start">
+    <div className="lg:col-span-full">
+      <DemoVideo />
+    </div>
+
+    <div className="lg:col-span-full">
+      <DemoAnalysis />
+    </div>
+  </div>
+</section>
+
+
+        <div className="mb-6">
+          <h1 className="text-3xl md:text-4xl font-semibold text-white">
+            Demo
           </h1>
-          <p className="mt-3 text-white/70 max-w-2xl">
-            Select category, product, region, and horizon — get trend, forecast chart, and summary.
+          <p className="mt-2 text-white/70">
+            Bu demo prognoz (CSV asosida). Keyin real AI/ML model ulanadi.
           </p>
         </div>
 
-        <div className="flex gap-3 flex-wrap">
-          <a
-            href={`${API_BASE}/docs`}
-            target="_blank"
-            rel="noreferrer"
-            className="px-5 py-3 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 transition"
-          >
-            API Docs
-          </a>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          {/* LEFT */}
+          <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/5 p-6">
+            <h2 className="text-xl font-semibold text-white">Tanlovlar</h2>
 
-          <button
-            onClick={runForecast}
-            disabled={loading}
-            className="px-6 py-3 rounded-xl bg-linear-to-r from-teal-500 to-indigo-500 text-black font-semibold hover:opacity-90 transition disabled:opacity-60"
-          >
-            {loading ? "Analyzing..." : "Run forecast"}
-          </button>
-        </div>
-      </div>
-
-      {/* Layout */}
-      <div className="mt-10 grid lg:grid-cols-3 gap-6 items-start">
-        {/* Left panel */}
-        <Glass className="p-7 lg:sticky lg:top-24">
-          <div className="text-lg font-semibold">Inputs</div>
-          <div className="text-white/60 text-sm mt-1">
-            Adjust parameters and run the forecast.
-          </div>
-
-          <div className="mt-6 space-y-5">
-            <div>
-              <Label>Category</Label>
-              <Select value={category} onChange={onCategoryChange} options={categories} />
-            </div>
-
-            <div>
-              <Label>Product</Label>
-              <Select value={product} onChange={setProduct} options={products} />
-            </div>
-
-            <div>
-              <Label>Region</Label>
-              <Select value={region} onChange={setRegion} options={regions} />
-            </div>
-
-            <div>
-              <Label>Horizon (days)</Label>
-              <Input
-                value={horizonDays}
-                onChange={(v) => setHorizonDays(v)}
-                type="number"
-                min={7}
-                max={180}
-                step={1}
-              />
-              <div className="text-xs text-white/50 mt-2">
-                Tip: 30 days is best for a demo.
-              </div>
-            </div>
-
-            {err && (
-              <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-200">
-                <div className="font-semibold">Request failed</div>
-                <div className="mt-1 text-red-200/90">{err}</div>
-                <div className="mt-2 text-red-200/70">
-                  Check backend URL/CORS or open API Docs to verify the endpoint.
-                </div>
-              </div>
-            )}
-
-            <button
-              onClick={runForecast}
-              disabled={loading}
-              className="w-full px-6 py-3 rounded-xl bg-linear-to-r from-teal-500 to-indigo-500 text-black font-semibold hover:opacity-90 transition disabled:opacity-60"
-            >
-              {loading ? "Analyzing..." : "Run forecast"}
-            </button>
-          </div>
-        </Glass>
-
-        {/* Right panel */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Top stats */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <Glass className="p-6">
-              <div className="text-xs text-white/60">Trend</div>
-              <div className="mt-3">
-                <TrendBadge trend={computed.trend} />
-              </div>
-              <div className="mt-3 text-white/60 text-sm">
-                DOWN = good (price dropping)
-              </div>
-            </Glass>
-
-            <Glass className="p-6">
-              <div className="text-xs text-white/60">Start price</div>
-              <div className="mt-2 text-2xl font-bold">
-                {formatUZS(computed.startPrice)}
-              </div>
-              <div className="mt-2 text-white/60 text-sm">
-                for {product} in {region}
-              </div>
-            </Glass>
-
-            <Glass className="p-6">
-              <div className="text-xs text-white/60">Expected change</div>
-              <div className="mt-2 text-2xl font-bold">{pct(computed.changePct)}</div>
-              <div className="mt-2 text-white/60 text-sm">
-                End: {formatUZS(computed.endPrice)}
-              </div>
-            </Glass>
-          </div>
-
-          {/* Chart */}
-          <Glass className="p-7">
-            <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="mt-5 space-y-4">
               <div>
-                <div className="text-lg font-semibold">Forecast chart</div>
-                <div className="text-white/60 text-sm mt-1">
-                  Horizon: {horizonDays} days
-                </div>
+                <label className="text-sm text-white/70">Kategoriya</label>
+                <select
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  {categories.map((c) => (
+                    <option key={c} value={c}>
+                      {categoryLabel(c)}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="text-xs text-white/50">
-                Source: demo dataset (CSV)
+              <div>
+                <label className="text-sm text-white/70">Mahsulot</label>
+                <select
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
+                  value={product}
+                  onChange={(e) => setProduct(e.target.value)}
+                >
+                  {products.map((p) => (
+                    <option key={p} value={p}>
+                      {productLabel(p)}
+                    </option>
+                  ))}
+                </select>
               </div>
-            </div>
 
-            <div className="mt-6">
-              {data ? (
-                <LineChart labels={computed.labels} points={computed.points} />
-              ) : (
-                <div className="rounded-2xl border border-white/10 bg-black/20 h-80 flex items-center justify-center text-white/50">
-                  Run forecast to view chart
-                </div>
-              )}
-            </div>
-          </Glass>
+              <div>
+                <label className="text-sm text-white/70">Hudud</label>
+                <select
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
+                  value={region}
+                  onChange={(e) => setRegion(e.target.value)}
+                >
+                  {regions.map((r) => (
+                    <option key={r} value={r}>
+                      {regionLabel(r)}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          {/* AI-style summary */}
-          <Glass className="p-7">
-            <div className="text-lg font-semibold">AI-style summary</div>
-            <div className="mt-3 text-white/70 leading-relaxed">
-              {data ? (
-                <SummaryText
-                  trend={computed.trend}
-                  product={product}
-                  region={region}
-                  start={computed.startPrice}
-                  end={computed.endPrice}
-                  changePct={computed.changePct}
-                  horizon={horizonDays}
+              <div>
+                <label className="text-sm text-white/70">Muddat (kun)</label>
+                <input
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
+                  type="number"
+                  min={7}
+                  max={365}
+                  value={horizonDays}
+                  onChange={(e) => setHorizonDays(e.target.value)}
                 />
-              ) : (
-                "Run forecast to generate a summary."
+                <p className="mt-2 text-xs text-white/50">
+                  Maslahat: 30 kun demo uchun qulay.
+                </p>
+              </div>
+
+              <button
+                onClick={onAnalyze}
+                disabled={loading || !category || !product || !region}
+                className="mt-2 w-full rounded-2xl px-5 py-3 font-semibold text-white
+                           bg-gradient-to-r from-fuchsia-500 to-indigo-500
+                           disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? "Hisoblanmoqda..." : "Prognoz qilish"}
+              </button>
+
+              {err && (
+                <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
+                  {err}
+                </div>
               )}
+
+              <div className="pt-2 text-xs text-white/45">
+                Backendga yuboriladigan kodlar: <b>{category}</b>, <b>{product}</b>, <b>{region}</b>
+              </div>
             </div>
-          </Glass>
+          </div>
+
+          {/* RIGHT */}
+          <div className="lg:col-span-3 space-y-6">
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-semibold text-white">Prognoz grafigi</h2>
+                  <p className="mt-1 text-white/60 text-sm">
+                    Mahsulot: <b className="text-white">{productLabel(product)}</b> · Hudud:{" "}
+                    <b className="text-white">{regionLabel(region)}</b>
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2">
+                  <span className={`h-2.5 w-2.5 rounded-full ${trend.dot}`} />
+                  <span className="text-sm text-white/80">
+                    Trend: {trend.label}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-5">
+                {result ? (
+                  <SvgLineChart
+                    labels={forecastLabels}
+                    values={forecastValues}
+                    color={trend.color}
+                    height={320}
+                  />
+                ) : (
+                  <div className="h-[320px] flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/60">
+                    Chapdan tanlab, “Prognoz qilish”ni bosing.
+                  </div>
+                )}
+
+                {result && !canDraw && (
+                  <div className="mt-3 text-xs text-amber-200/90">
+                    Diqqat: forecast.labels va forecast.values uzunligi teng emas yoki values ichidan son topilmadi.
+                  </div>
+                )}
+
+                {result && (
+                  <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                    <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+                      <div className="text-white/50">So‘nggi narx</div>
+                      <div className="mt-1 text-white font-semibold">{moneyUZS(lastPrice)}</div>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+                      <div className="text-white/50">Prognoz yakuni</div>
+                      <div className="mt-1 text-white font-semibold">{moneyUZS(endForecast)}</div>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+                      <div className="text-white/50">O‘zgarish</div>
+                      <div className="mt-1 font-semibold" style={{ color: trend.color }}>
+                        {typeof changePct === "number" ? `${changePct > 0 ? "+" : ""}${changePct.toFixed(2)}%` : "—"}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+              <div className="flex items-start justify-between gap-4">
+                <h2 className="text-xl font-semibold text-white">AI xulosa</h2>
+                <div className="text-sm text-white/70">
+                  Ishonchlilik: <b className="text-white">{Number.isFinite(Number(conf)) ? `${conf}%` : "—"}</b>
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-white/80">{aiSummary}</p>
+
+                <div className="mt-4">
+                  <div className="text-white font-semibold">Tavsiya</div>
+                  <p className="mt-1 text-white/75">{aiRec}</p>
+                </div>
+
+                <div className="mt-4 text-xs text-white/45">
+                  Eslatma: Bu demo prognoz (CSV). Keyin real AI/ML model bilan kuchaytiriladi.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 text-center text-xs text-white/40">
+          Demo versiyada select qiymatlari backend kodlari bo‘lib qoladi, ko‘rinishi esa O‘zbekcha bo‘ladi.
         </div>
       </div>
     </div>
-  );
-}
-
-function SummaryText({ trend, product, region, start, end, changePct, horizon }) {
-  const t = (trend || "").toLowerCase();
-  const isDown = t === "down";
-  const isUp = t === "up";
-
-  const action = isDown ? "Consider waiting or buying later." : isUp ? "Consider buying earlier." : "Monitor the price.";
-
-  return (
-    <>
-      <p>
-        Based on recent signals, <span className="font-semibold">{product}</span> in{" "}
-        <span className="font-semibold">{region}</span> is expected to trend{" "}
-        <span className="font-semibold">
-          {isDown ? "DOWN" : isUp ? "UP" : "FLAT"}
-        </span>{" "}
-        over the next <span className="font-semibold">{horizon}</span> days.
-      </p>
-
-      <p className="mt-3">
-        The forecast moves from <span className="font-semibold">{formatUZS(start)}</span> to{" "}
-        <span className="font-semibold">{formatUZS(end)}</span> (change:{" "}
-        <span className="font-semibold">{pct(changePct)}</span>).
-      </p>
-
-      <p className="mt-3">
-        Recommendation: <span className="font-semibold">{action}</span>
-      </p>
-
-      <p className="mt-3 text-white/50 text-sm">
-        Note: This is a demo baseline forecast. The UI and API contract are designed to support real ML models later.
-      </p>
-    </>
   );
 }
