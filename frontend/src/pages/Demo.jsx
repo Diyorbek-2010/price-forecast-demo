@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import demo from "../assets/DemoVideo/DemoVideo.mp4";
+import demo from "../assets/Demovideo/DemoVideo.mp4";
 
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
