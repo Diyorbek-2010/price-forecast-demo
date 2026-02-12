@@ -47,8 +47,8 @@ export default function Navbar() {
                   className={({ isActive }) =>
                     "text-sm px-3 py-2 rounded-lg transition " +
                     (isActive
-                      ? "bg-white/10 text-white dark:bg-white/10 dark:text-white bg-black/10 text-black"
-                      : "text-white/70 hover:text-white hover:bg-white/5 dark:text-white/70 dark:hover:text-white dark:hover:bg-white/5 text-black/70 hover:text-black hover:bg-black/5")
+                      ? "text-white dark: dark:text-white bg-black/10 text-black"
+                      : "text-white/70 hover:text-white hover: dark:text-white/70 dark:hover:text-white dark:hover: text-black/70 hover:text-black hover:bg-black/5")
                   }
                 >
                   {t(it.key)}
