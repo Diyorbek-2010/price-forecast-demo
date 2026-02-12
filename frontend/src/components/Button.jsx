@@ -20,9 +20,9 @@ export function GhostButton({ className = "", ...props }) {
       {...props}
       className={
         "inline-flex items-center justify-center rounded-xl px-5 py-3 " +
-        "border border-white/15 bg-white/5 text-white hover:bg-white/10 " +
-        "dark:border-white/15 dark:bg-white/5 " +
-        "border-black/10 bg-white/60 text-black hover:bg-white/80 dark:text-white " +
+        "border border-white/15  text-white " +
+        "dark:border-white/15 " +
+        "border-black/10 text-black dark:text-white " +
         className
       }
     />
