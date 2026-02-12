@@ -420,9 +420,6 @@ export default function Demo() {
           <h1 className="text-3xl md:text-4xl font-semibold text-white">
             Demo
           </h1>
-          <p className="mt-2 text-white/70">
-            Bu demo prognoz (CSV asosida). Keyin real AI/ML model ulanadi.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -506,10 +503,6 @@ export default function Demo() {
                   {err}
                 </div>
               )}
-
-              <div className="pt-2 text-xs text-white/45">
-                Backendga yuboriladigan kodlar: <b>{category}</b>, <b>{product}</b>, <b>{region}</b>
-              </div>
             </div>
           </div>
 
@@ -588,10 +581,6 @@ export default function Demo() {
                 <div className="mt-4">
                   <div className="text-white font-semibold">Tavsiya</div>
                   <p className="mt-1 text-white/75">{aiRec}</p>
-                </div>
-
-                <div className="mt-4 text-xs text-white/45">
-                  Eslatma: Bu demo prognoz (CSV). Keyin real AI/ML model bilan kuchaytiriladi.
                 </div>
               </div>
             </div>

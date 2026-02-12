@@ -32,7 +32,7 @@ const TEAM = [
     img: fotima,
   },
   {
-    name: "Nasrullo Mutfulloyev",
+    name: "Nasrullo Nutfulloyev",
     role: "Data Analyst",
      
     bio: "Ma’lumotlarni tozalash, trend/seasonality tahlili va metrikalar. Vizual analitika hamda business uchun tushunarli xulosalar tayyorlaydi.",
