@@ -2,7 +2,7 @@ export function Glass({ children, className = "" }) {
   return (
     <div
       className={
-        "rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg " +
+        "rounded-3xl border border-white/10  backdrop-blur-xl shadow-lg " +
         className
       }
     >
@@ -16,7 +16,7 @@ export function Page({ title, kicker, desc, children }) {
     <div className="max-w-6xl mx-auto px-4 py-14">
       <div className="text-center max-w-3xl mx-auto">
         {kicker && (
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white/80">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10  text-sm text-white/80">
             {kicker}
           </div>
         )}
@@ -31,7 +31,7 @@ export function Page({ title, kicker, desc, children }) {
 
 export function Card({ title, desc }) {
   return (
-    <Glass className="p-6 hover:bg-white/10 transition">
+    <Glass className="p-6 transition">
       <div className="text-lg font-semibold">{title}</div>
       <div className="text-white/70 text-sm mt-2 leading-relaxed">{desc}</div>
     </Glass>
