@@ -597,10 +597,6 @@ export default function Demo() {
             </div>
           </div>
         </div>
-
-        <div className="mt-8 text-center text-xs text-white/40">
-          Demo versiyada select qiymatlari backend kodlari bo‘lib qoladi, ko‘rinishi esa O‘zbekcha bo‘ladi.
-        </div>
       </div>
     </div>
   );
