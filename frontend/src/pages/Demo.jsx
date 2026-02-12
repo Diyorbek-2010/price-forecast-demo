@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import demo from "../assets/DemoVideo/DemoVideo.mp4";
+
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
@@ -41,9 +43,6 @@ const REGION_UZ = {
   Karakalpakstan: "Qoraqalpog‘iston",
 };
 function DemoVideo() {
-  const YT_EMBED =
-    "https://youtu.be/OFc8AT0w_oQ?si=EAsG_pD5Piek4m9Q";
-
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
       <div
@@ -53,24 +52,18 @@ function DemoVideo() {
           minHeight: "520px", // ✅ videoni ko‘zga katta qiladi
         }}
       >
-        <iframe
-          src={YT_EMBED}
-          title="BazaarAI Demo Video"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-          }}
+        <video
+          className="w-full h-full rounded-2xl object-cover"
+          src={demo}
+          autoPlay
+          loop
+          muted
+          controls
         />
       </div>
     </div>
   );
 }
-
 
 function DemoAnalysis() {
   return (
@@ -93,14 +86,18 @@ function DemoAnalysis() {
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">{useTranslation().t("demo.MuammoTitle")}</h3>
+          <h3 className="text-white font-semibold">
+            {useTranslation().t("demo.MuammoTitle")}
+          </h3>
           <p className="mt-2 text-white/75 leading-relaxed">
             {useTranslation().t("demo.BozordaTitle")}
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">{useTranslation().t("demo.TexnologiyalarTitle")}</h3>
+          <h3 className="text-white font-semibold">
+            {useTranslation().t("demo.TexnologiyalarTitle")}
+          </h3>
           <p className="mt-2 text-white/75 leading-relaxed">
             {useTranslation().t("demo.BazaarAImachineTitle")}
           </p>
@@ -110,16 +107,11 @@ function DemoAnalysis() {
   );
 }
 
-
-
-
 function prettyFallback(s) {
   // unknown kelib qolsa ham chiroyli ko‘rsatish uchun
   const str = String(s ?? "");
   if (!str) return "—";
-  return str
-    .replaceAll("_", " ")
-    .replace(/\b\w/g, (m) => m.toUpperCase());
+  return str.replaceAll("_", " ").replace(/\b\w/g, (m) => m.toUpperCase());
 }
 
 function categoryLabel(c) {
@@ -164,9 +156,26 @@ function normalizeForecastValues(valuesRaw) {
 
 function trendStyle(trendRaw) {
   const t = String(trendRaw || "").toLowerCase();
-  if (t === "up") return { key: "up", label: "OSHDI", color: "#22c55e", dot: "bg-emerald-400" };
-  if (t === "down") return { key: "down", label: "TUSHDI", color: "#ef4444", dot: "bg-rose-400" };
-  return { key: "flat", label: "O‘ZGARMADI", color: "#9ca3af", dot: "bg-slate-300" };
+  if (t === "up")
+    return {
+      key: "up",
+      label: "OSHDI",
+      color: "#22c55e",
+      dot: "bg-emerald-400",
+    };
+  if (t === "down")
+    return {
+      key: "down",
+      label: "TUSHDI",
+      color: "#ef4444",
+      dot: "bg-rose-400",
+    };
+  return {
+    key: "flat",
+    label: "O‘ZGARMADI",
+    color: "#9ca3af",
+    dot: "bg-slate-300",
+  };
 }
 
 /**
@@ -200,7 +209,9 @@ function SvgLineChart({ labels, values, color = "#22c55e", height = 320 }) {
     });
 
     const d = pts
-      .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`)
+      .map(
+        (p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`,
+      )
       .join(" ");
     return { pathD: d, minV: minVal, maxV: maxVal };
   }, [ok, values]);
@@ -290,7 +301,9 @@ export default function Demo() {
         const first = list[0] || "";
         setCategory(first);
       } catch {
-        setErr("Katalogni olishda xatolik (categories). Backend Javob bermayapti");
+        setErr(
+          "Katalogni olishda xatolik (categories). Backend Javob bermayapti",
+        );
       }
     })();
   }, []);
@@ -300,7 +313,9 @@ export default function Demo() {
     if (!category) return;
     (async () => {
       try {
-        const r = await fetch(`${API_BASE}/catalog/products?category=${encodeURIComponent(category)}`);
+        const r = await fetch(
+          `${API_BASE}/catalog/products?category=${encodeURIComponent(category)}`,
+        );
         const data = await r.json();
         const list = Array.isArray(data) ? data : [];
         setProducts(list);
@@ -318,7 +333,7 @@ export default function Demo() {
     (async () => {
       try {
         const r = await fetch(
-          `${API_BASE}/catalog/regions?category=${encodeURIComponent(category)}&product=${encodeURIComponent(product)}`
+          `${API_BASE}/catalog/regions?category=${encodeURIComponent(category)}&product=${encodeURIComponent(product)}`,
         );
         const data = await r.json();
         const list = Array.isArray(data) ? data : [];
@@ -333,7 +348,9 @@ export default function Demo() {
 
   const trend = trendStyle(result?.forecast?.trend);
   const forecastLabels = result?.forecast?.labels ?? [];
-  const forecastValues = normalizeForecastValues(result?.forecast?.values ?? []);
+  const forecastValues = normalizeForecastValues(
+    result?.forecast?.values ?? [],
+  );
   const canDraw =
     Array.isArray(forecastLabels) &&
     forecastLabels.length > 1 &&
@@ -387,17 +404,16 @@ export default function Demo() {
     <div className="min-h-[calc(100vh-80px)] px-4 py-10">
       <div className="mx-auto max-w-6xl">
         <section className="mb-10">
-  <div className="grid gap-6 lg:grid-cols-12 items-start">
-    <div className="lg:col-span-full">
-      <DemoVideo />
-    </div>
+          <div className="grid gap-6 lg:grid-cols-12 items-start">
+            <div className="lg:col-span-full">
+              <DemoVideo />
+            </div>
 
-    <div className="lg:col-span-full">
-      <DemoAnalysis />
-    </div>
-  </div>
-</section>
-
+            <div className="lg:col-span-full">
+              <DemoAnalysis />
+            </div>
+          </div>
+        </section>
 
         <div className="mb-6">
           <h1 className="text-3xl md:text-4xl font-semibold text-white">
@@ -494,10 +510,13 @@ export default function Demo() {
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-white">Prognoz grafigi</h2>
+                  <h2 className="text-xl font-semibold text-white">
+                    Prognoz grafigi
+                  </h2>
                   <p className="mt-1 text-white/60 text-sm">
-                    Mahsulot: <b className="text-white">{productLabel(product)}</b> · Hudud:{" "}
-                    <b className="text-white">{regionLabel(region)}</b>
+                    Mahsulot:{" "}
+                    <b className="text-white">{productLabel(product)}</b> ·
+                    Hudud: <b className="text-white">{regionLabel(region)}</b>
                   </p>
                 </div>
 
@@ -525,7 +544,8 @@ export default function Demo() {
 
                 {result && !canDraw && (
                   <div className="mt-3 text-xs text-amber-200/90">
-                    Diqqat: forecast.labels va forecast.values uzunligi teng emas yoki values ichidan son topilmadi.
+                    Diqqat: forecast.labels va forecast.values uzunligi teng
+                    emas yoki values ichidan son topilmadi.
                   </div>
                 )}
 
@@ -533,16 +553,25 @@ export default function Demo() {
                   <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
                     <div className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="text-white/50">So‘nggi narx</div>
-                      <div className="mt-1 text-white font-semibold">{moneyUZS(lastPrice)}</div>
+                      <div className="mt-1 text-white font-semibold">
+                        {moneyUZS(lastPrice)}
+                      </div>
                     </div>
                     <div className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="text-white/50">Prognoz yakuni</div>
-                      <div className="mt-1 text-white font-semibold">{moneyUZS(endForecast)}</div>
+                      <div className="mt-1 text-white font-semibold">
+                        {moneyUZS(endForecast)}
+                      </div>
                     </div>
                     <div className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="text-white/50">O‘zgarish</div>
-                      <div className="mt-1 font-semibold" style={{ color: trend.color }}>
-                        {typeof changePct === "number" ? `${changePct > 0 ? "+" : ""}${changePct.toFixed(2)}%` : "—"}
+                      <div
+                        className="mt-1 font-semibold"
+                        style={{ color: trend.color }}
+                      >
+                        {typeof changePct === "number"
+                          ? `${changePct > 0 ? "+" : ""}${changePct.toFixed(2)}%`
+                          : "—"}
                       </div>
                     </div>
                   </div>
@@ -554,7 +583,10 @@ export default function Demo() {
               <div className="flex items-start justify-between gap-4">
                 <h2 className="text-xl font-semibold text-white">AI xulosa</h2>
                 <div className="text-sm text-white/70">
-                  Ishonchlilik: <b className="text-white">{Number.isFinite(Number(conf)) ? `${conf}%` : "—"}</b>
+                  Ishonchlilik:{" "}
+                  <b className="text-white">
+                    {Number.isFinite(Number(conf)) ? `${conf}%` : "—"}
+                  </b>
                 </div>
               </div>
 
