@@ -33,8 +33,7 @@ const resources = {
       home: {
         badge: "AI Price Forecasting",
         h1: "Predict price movement before it happens",
-        p:
-          "A premium AI-style dashboard for short-term price forecasting. Built as a demo today — designed to scale into a real ML product tomorrow.",
+        p: "A premium AI-style dashboard for short-term price forecasting. Built as a demo today — designed to scale into a real ML product tomorrow.",
         ctaPrimary: "Open Demo",
         ctaSecondary: "Explore Problem",
 
@@ -106,6 +105,14 @@ const resources = {
         demoTitle: "Demo today, real ML tomorrow",
         demoText:
           "The architecture is built to replace baseline logic with real ML models and live data sources later.",
+        ChooseTitle: "Choose product and region",
+        PickTitle: "Pick forecast horizon",
+        Get_chartTitle: "Get chart + trend + summary",
+        LiveTitle: "Live data ingestion in the works",
+        MLTitle: "ML forecasting models",
+        ConfidenceTitle: "Confidence intervals",
+        AlertsTitle: "Alerts & watchlists",
+        PlannedTitle: "Planned upgrades",
       },
 
       how: {
@@ -115,12 +122,20 @@ const resources = {
         step1: "Select inputs",
         step1Text: "Choose category, product, region, and forecast horizon.",
         step2: "Analyze",
-        step2Text: "Backend loads relevant history, computes trend, generates forecast.",
+        step2Text:
+          "Backend loads relevant history, computes trend, generates forecast.",
         step3: "View results",
         step3Text: "Frontend renders chart, trend badge, and AI-style summary.",
         inputTitle: "What users provide",
         outputTitle: "What users receive",
         vsTitle: "Demo vs real product",
+        CategoryTitle: "Category",
+        ProductTitle: "Product",
+        RegionTitle: "Region",
+        HorizonTitle: "Horizon (7/30/90 days)",
+        TrendTitle: "Trend signal (UP/DOWN/FLAT)",
+        ChartTitle: "Chart-ready data with history and forecast",
+        SummaryTitle: "Human-friendly summary + recommendation",
       },
 
       benefits: {
@@ -135,6 +150,12 @@ const resources = {
         coreCText: "See chart + trend + summary instead of guessing.",
         households: "For households",
         businesses: "For small businesses",
+        PlanTitle: "Plan shopping with less uncertainty",
+        AvoidTitle: "Avoid peak prices",
+        CompareTitle: "Compare regions quickly",
+        ReduceTitle: "Reduce inventory risk",
+        ChooseTitle: "Choose restock timing",
+        MonitorTitle: "Monitor key products",
       },
 
       roadmap: {
@@ -147,18 +168,47 @@ const resources = {
         whyTitle: "Why this roadmap works",
         whyText:
           "Forecasting is not only modeling — data quality matters. Better data → better forecasts.",
+        CuratedTitle: "Curated CSV dataset",
+        BaselineTitle: "Baseline trend (UP/DOWN/FLAT), simple forecast",
+        DashboardTitle: "Clean UI with chart, trend badge, and summary",
+        StableTitle: "Stable API contract for future ML integration",
+        AutomatedTitle: "Automated ingestion from public data sources",
+        CleaningTitle: "Cleaning & normalization for better data quality",
+        MonitoringTitle: "Monitoring & anomaly detection",
+        ValidationTitle: "Validation pipeline for improving forecast accuracy",
+        MLTitle: "ML forecasting models",
+        ConfidenceTitle: "Confidence intervals",
+        ExplainabilityTitle: "Explainability features for AI predictions",
+        AlertsTitle: "Alerts and watchlist features for users",
       },
 
       faq: {
         title: "Frequently asked questions",
         subtitle:
           "Quick answers about the demo and how it evolves into a real AI product.",
+        IsTitle: "Is this real AI?",
+        ThisTitle:
+          "This is a demo baseline. The UI and API are built to support real ML models later.",
+        WhereTitle: "Where does the data come from?",
+        DemoTitle:
+          "Demo uses curated CSV data. Next step is live ingestion from real sources.",
+        CanTitle: "Can it predict perfectly?",
+        NoTitle: "No model is perfect. We provide direction + chart + context.",
+        WillTitle: "Will you add alerts?",
+        YesTitle:
+          "Yes. Watchlists and notifications are planned for the real product.",
       },
 
       mvp: {
         title: "What the demo includes today",
         subtitle:
           "A minimal end-to-end product: data → API → dashboard. Built to upgrade into real ML later.",
+        EndTitle: "End-to-end workflow",
+        InputsTitle: "Inputs → analysis → chart + summary.",
+        StableTitle: "Stable API contract",
+        ChartTitle: "Chart-ready JSON response for UI rendering.",
+        UpgradeableTitle: "Upgradeable architecture",
+        BaselineTitle: "Baseline logic can be replaced by real ML later.",
       },
 
       demo: {
@@ -179,13 +229,26 @@ const resources = {
         summaryTitle: "AI-style summary",
         placeholder: "Run forecast to view chart",
         failed: "Request failed",
+
+        BazaarAITitle: "BazaarAI — Smart Product Price Forecasting Platform",
+        VideodaTitle: "What is shown in the video",
+        UshbuTitle:
+          "This video demonstrates the full workflow of the BazaarAI platform. The user selects a product category (such as rice, wheat, cotton, potatoes, onions, tomatoes, meat, dairy products, sugar, oil, cement, metals and other consumer or industrial goods) and enters the required parameters. The platform automatically analyzes historical prices, trading volumes, seasonality, regional factors and market dynamics. The AI model calculates 7, 30 and 90-day price forecasts in real time, showing the probability of increase or decrease in percentages, assessing risk levels and providing confidence intervals. Visual charts also display trends and seasonal fluctuations.",
+        MuammoTitle: "How the problem and solution are connected",
+        BozordaTitle:
+          "Frequent price fluctuations in the market are a serious challenge for traders and producers. Sharp price drops can lead to losses, while selling at the wrong time can reduce profits. Many small and medium-sized businesses lack analytical tools, so decisions are often made based on subjective judgment. BazaarAI solves this problem with a data-driven forecasting model. The platform analyzes demand and supply dynamics, seasonal factors, logistics costs and macroeconomic indicators to deliver more accurate and reliable price predictions. As a result, users can identify optimal selling times, improve inventory management and reduce financial risks.",
+        TexnologiyalarTitle: "Technologies",
+        BazaarAImachineTitle:
+          "BazaarAI is built on a modern machine learning architecture. It combines Gradient Boosting Regressor, Random Forest and LSTM models using an ensemble approach to improve forecasting accuracy. Feature engineering includes trend, seasonality, moving averages, volatility and anomaly detection. The backend is developed with Python and FastAPI, and data is stored in PostgreSQL. Models are trained using Scikit-learn and TensorFlow and continuously updated with automated retraining. The system provides real-time predictions via REST API and displays results through a visual analytics module.",
+        KatalogniTitle:
+          "Catalog loading error (categories). Backend is not responding",
       },
     },
   },
 
   ru: {
     translation: {
-      brand: { name: "PriceForecast" },
+      brand: { name: "BazaarAi" },
       nav: {
         home: "Главная",
         demo: "Демо",
@@ -213,8 +276,7 @@ const resources = {
       home: {
         badge: "AI Прогноз цен",
         h1: "Предсказывайте движение цен заранее",
-        p:
-          "Премиальный AI-дашборд для краткосрочного прогнозирования цен. Сегодня — демо, завтра — настоящий ML продукт.",
+        p: "Премиальный AI-дашборд для краткосрочного прогнозирования цен. Сегодня — демо, завтра — настоящий ML продукт.",
         ctaPrimary: "Открыть демо",
         ctaSecondary: "Посмотреть проблему",
 
@@ -286,6 +348,14 @@ const resources = {
         demoTitle: "Демо сегодня, ML завтра",
         demoText:
           "Архитектура позволяет заменить базовую логику на реальный ML и живые источники данных.",
+        ChooseTitle: "Выберите продукт и регион",
+        PickTitle: "Выберите горизонт прогноза",
+        Get_chartTitle: "Получите график + тренд + резюме",
+        LiveTitle: "Работаем над подключением живых данных",
+        MLTitle: "ML модели для прогнозирования",
+        ConfidenceTitle: "Доверительные интервалы",
+        AlertsTitle: "Уведомления и watchlist",
+        PlannedTitle: "Планируемые обновления",
       },
 
       how: {
@@ -301,6 +371,13 @@ const resources = {
         inputTitle: "Что вводит пользователь",
         outputTitle: "Что получает пользователь",
         vsTitle: "Демо vs продукт",
+        CategoryTitle: "Категория",
+        ProductTitle: "Продукт",
+        RegionTitle: "Регион",
+        HorizonTitle: "Горизонт (7/30/90 дней)",
+        TrendTitle: "Сигнал тренда (UP/DOWN/FLAT)",
+        ChartTitle: "Данные для графика с историей и прогнозом",
+        SummaryTitle: "Понятное резюме + рекомендация",
       },
 
       benefits: {
@@ -315,30 +392,64 @@ const resources = {
         coreCText: "График + тренд + резюме вместо догадок.",
         households: "Для семей",
         businesses: "Для малого бизнеса",
+        PlanTitle: "Планируйте покупки с меньшей неопределённостью",
+        AvoidTitle: "Избегайте пиковых цен",
+        CompareTitle: "Быстро сравнивайте регионы",
+        ReduceTitle: "Снижайте риски запасов",
+        ChooseTitle: "Выбирайте время закупки",
+        MonitorTitle: "Следите за ключевыми продуктами",
       },
 
       roadmap: {
         title: "От демо к реальному AI-продукту",
-        subtitle:
-          "Сначала UX, затем данные, затем масштабируем ML.",
+        subtitle: "Сначала UX, затем данные, затем масштабируем ML.",
         phase1: "Сейчас — демо",
         phase2: "Дальше — данные",
         phase3: "Позже — ML/AI",
         whyTitle: "Почему это работает",
         whyText:
           "Прогноз — это не только модель. Качество данных критично: лучше данные → лучше прогноз.",
+        CuratedTitle: "Кураторский CSV-датасет",
+        BaselineTitle: "Базовый тренд (UP/DOWN/FLAT), простой прогноз",
+        DashboardTitle: "Чистый UI с графиком, бейджем тренда и резюме",
+        StableTitle: "Стабильный API для будущей ML интеграции",
+        AutomatedTitle: "Автоматический сбор данных из публичных источников",
+        CleaningTitle: "Очистка и нормализация для лучшего качества данных",
+        MonitoringTitle: "Мониторинг и обнаружение аномалий",
+        ValidationTitle: "Пайплайн валидации для улучшения точности прогнозов",
+        MLTitle: "ML модели для прогнозирования",
+        ConfidenceTitle: "Доверительные интервалы",
+        ExplainabilityTitle: "Функции объяснения для AI-прогнозов",
+        AlertsTitle: "Уведомления и функции watchlist для пользователей",
       },
 
       faq: {
         title: "FAQ",
-        subtitle:
-          "Ответы о демо и развитии до реального AI-продукта.",
+        subtitle: "Ответы о демо и развитии до реального AI-продукта.",
+        IsTitle: "Это настоящий AI?",
+        ThisTitle:
+          "Это демо-версия. UI и API построены для поддержки реальных ML моделей позже.",
+        WhereTitle: "Откуда данные?",
+        DemoTitle:
+          "Демо использует кураторский CSV. Следующий шаг — живые данные.",
+        CanTitle: "Он может предсказывать идеально?",
+        NoTitle:
+          "Нет модели не идеальны. Мы предоставляем направление, график и контекст.",
+        WillTitle: "Вы добавите уведомления?",
+        YesTitle:
+          "Да. Watchlist и уведомления запланированы для реального продукта.",
       },
 
       mvp: {
         title: "Что включает MVP сегодня",
         subtitle:
           "Минимальный end-to-end продукт: данные → API → дашборд. Готов к апгрейду в ML.",
+        EndTitle: "End-to-end workflow",
+        InputsTitle: "Inputs → analysis → chart + summary.",
+        StableTitle: "Stable API contract",
+        ChartTitle: "Chart-ready JSON response for UI rendering.",
+        UpgradeableTitle: "Upgradeable architecture",
+        BaselineTitle: "Baseline logic can be replaced by real ML later.",
       },
 
       demo: {
@@ -359,13 +470,27 @@ const resources = {
         summaryTitle: "AI-резюме",
         placeholder: "Нажмите Run forecast чтобы увидеть график",
         failed: "Ошибка запроса",
+        BazaarAITitle:
+          "BazaarAI — Платформа интеллектуального прогнозирования цен на товары",
+
+        VideodaTitle: "Что показано в видео",
+        UshbuTitle:
+          "В этом видео демонстрируется полный процесс работы платформы BazaarAI. Пользователь выбирает тип продукта (например: рис, пшеница, хлопок, картофель, лук, помидоры, мясо, молочные продукты, сахар, масло, цемент, металл и другие потребительские и промышленные товары) и вводит необходимые данные. Платформа автоматически анализирует исторические цены, объёмы торговли, сезонность, региональные факторы и рыночную динамику. AI-модель в режиме реального времени рассчитывает прогноз цен на 7, 30 и 90 дней, показывает вероятность роста или падения в процентах, оценивает уровень риска и предоставляет доверительный интервал. Также с помощью визуальных графиков отображаются тренды и сезонные колебания.",
+        MuammoTitle: "Как связаны проблема и решение",
+        BozordaTitle:
+          "Частые изменения цен на рынке являются серьёзной проблемой для продавцов и производителей. Резкое снижение цен может привести к убыткам, а продажа в неподходящий момент — к снижению прибыли. У многих малых и средних бизнесов отсутствуют аналитические инструменты, поэтому решения принимаются на основе субъективных оценок. BazaarAI решает эту проблему с помощью модели прогнозирования на основе данных. Платформа учитывает динамику спроса и предложения, сезонные факторы, логистические расходы и макроэкономические показатели, предоставляя более точный и обоснованный прогноз цен. В результате пользователи могут определить оптимальное время продажи, улучшить управление запасами и снизить финансовые риски.",
+        TexnologiyalarTitle: "Технологии",
+        BazaarAImachineTitle:
+          "BazaarAI построен на современной архитектуре машинного обучения. Используется комбинация моделей Gradient Boosting Regressor, Random Forest и LSTM с применением ансамблевого подхода для повышения точности прогнозов. На этапе feature engineering выделяются тренды, сезонность, скользящие средние, волатильность и аномалии. Backend разработан на Python и FastAPI, данные хранятся в базе PostgreSQL. Модели обучены с использованием Scikit-learn и TensorFlow и регулярно обновляются через механизм автоматического переобучения. Система предоставляет прогнозы в реальном времени через REST API и отображает результаты в виде визуальной аналитики.",
+        KatalogniTitle:
+          "Ошибка загрузки каталога (categories). Backend не отвечает",
       },
     },
   },
 
   uz: {
     translation: {
-      brand: { name: "PriceForecast" },
+      brand: { name: "BazaarAi" },
       nav: {
         home: "Bosh sahifa",
         demo: "Demo",
@@ -393,8 +518,7 @@ const resources = {
       home: {
         badge: "AI Narx Prognozi",
         h1: "Narx yo‘nalishini oldindan bilib oling",
-        p:
-          "Qisqa muddatli narx prognozi uchun premium AI uslubidagi dashboard. Bugun demo — ertaga real ML mahsulot.",
+        p: "Qisqa muddatli narx prognozi uchun premium AI uslubidagi dashboard. Bugun demo — ertaga real ML mahsulot.",
         ctaPrimary: "Demoni ochish",
         ctaSecondary: "Muammoni ko‘rish",
 
@@ -461,11 +585,17 @@ const resources = {
         provideC: "Tavsiya",
         provideCText: "Hozir olish, kutish yoki kuzatish.",
         fastTitle: "Tez qarorlar uchun",
-        fastText:
-          "Murakkab analitika emas — tushunarli va tez workflow.",
+        fastText: "Murakkab analitika emas — tushunarli va tez workflow.",
         demoTitle: "Bugun demo, ertaga ML",
-        demoText:
-          "Arxitektura real ML va live data ulashga tayyor.",
+        demoText: "Arxitektura real ML va live data ulashga tayyor.",
+        ChooseTitle: "Mahsulot va hududni tanlang",
+        PickTitle: "Prognoz muddatini tanlang",
+        Get_chartTitle: "Grafik + trend + izohni oling",
+        LiveTitle: "Live data ulash ustida ishlayapmiz",
+        MLTitle: "ML prognoz modellari",
+        ConfidenceTitle: "Ishonch oralig‘i",
+        AlertsTitle: "Bildirishnomalar va watchlistlar",
+        PlannedTitle: "Rejalashtirilgan yangilanishlar",
       },
 
       how: {
@@ -481,6 +611,13 @@ const resources = {
         inputTitle: "Foydalanuvchi nimani kiritadi",
         outputTitle: "Foydalanuvchi nimani oladi",
         vsTitle: "Demo vs real mahsulot",
+        CategoryTitle: "Kategoriya",
+        ProductTitle: "Mahsulot",
+        RegionTitle: "Hudud",
+        HorizonTitle: "Muddat (7/30/90 kun)",
+        TrendTitle: "Trend signali (UP/DOWN/FLAT)",
+        ChartTitle: "Tarix va prognoz bilan grafik ma’lumot",
+        SummaryTitle: "Tushunarli izoh + tavsiya",
       },
 
       benefits: {
@@ -495,36 +632,73 @@ const resources = {
         coreCText: "Taxmin emas — grafik va xulosa.",
         households: "Oilalar uchun",
         businesses: "Biznes uchun",
+        PlanTitle: "Kam noaniqlik bilan xaridni rejalashtiring",
+        AvoidTitle: "Qimmat narxlardan qoching",
+        CompareTitle: "Hududlarni tez taqqoslang",
+        ReduceTitle: "Zaxira riskini kamaytiring",
+        ChooseTitle: "Zaxira vaqtini tanlang",
+        MonitorTitle: "Asosiy mahsulotlarni kuzatib boring",
       },
 
       roadmap: {
         title: "Demodan real AI mahsulotgacha",
-        subtitle:
-          "Avval UX, keyin data, keyin ML’ni kuchaytiramiz.",
+        subtitle: "Avval UX, keyin data, keyin ML’ni kuchaytiramiz.",
         phase1: "Hozir — demo",
         phase2: "Keyin — real data",
         phase3: "Keyinroq — ML/AI",
         whyTitle: "Nega bu reja ishlaydi",
         whyText:
           "Prognoz faqat model emas — data sifati muhim: yaxshi data → yaxshi prognoz.",
+        CuratedTitle: "Kuratordan CSV dataset",
+        BaselineTitle: "Baseline trend (UP/DOWN/FLAT)",
+        DashboardTitle: "Grafik, trend va izoh bilan toza UI",
+        StableTitle: "Kelajakdagi ML integratsiyasi uchun barqaror API",
+        AutomatedTitle: "Ommaviy data manbalaridan avtomatik ma’lumot olish",
+        CleaningTitle:
+          "Yaxshiroq data sifati uchun tozalash va normallashtirish",
+        MonitoringTitle: "Anomaliyalarni aniqlash va monitoring",
+        ValidationTitle:
+          "Prognoz aniqligini oshirish uchun validatsiya pipeline",
+        MLTitle: "ML prognoz modellari",
+        ConfidenceTitle: "Ishonch oralig‘i",
+        ExplainabilityTitle: "AI prognozlari uchun tushuntirish xususiyatlari",
+        AlertsTitle:
+          "Foydalanuvchilar uchun bildirishnomalar va watchlist xususiyatlari",
       },
 
       faq: {
         title: "FAQ",
-        subtitle:
-          "Demo va keyingi rivojlanish bo‘yicha tez javoblar.",
+        subtitle: "Demo va keyingi rivojlanish bo‘yicha tez javoblar.",
+        IsTitle: "Bu haqiqiy AI emasmi?",
+        ThisTitle:
+          "Bu demo versiya. UI va API keyinchalik real ML modellarini qo‘llab-quvvatlash uchun qurilgan.",
+        WhereTitle: "Ma’lumot qayerdan keladi?",
+        DemoTitle:
+          "Demo kuratordan CSV ma’lumotidan foydalanadi. Keyingi qadam — real manbalardan live data.",
+        CanTitle: "Bu mukammal prognoz bera oladimi?",
+        NoTitle:
+          "Yo‘q, hech qanday model mukammal emas. Biz yo‘nalish + grafik + kontekst taqdim etamiz.",
+        WillTitle: "Siz bildirishnomalarni qo‘shasizmi?",
+        YesTitle:
+          "Ha. Watchlist va bildirishnomalar real mahsulot uchun rejalashtirilgan.",
       },
 
       mvp: {
         title: "MVP hozir nimalarni beradi",
         subtitle:
           "Minimal end-to-end: data → API → dashboard. Keyin ML’ga tayyor.",
+        EndTitle: "End-to-end workflow",
+        InputsTitle: "Inputs → analysis → chart + summary.",
+        StableTitle: "Barqaror API",
+        ChartTitle: "UI rendering uchun chart-ready JSON javob.",
+        UpgradeableTitle: "Yaxshilanishga tayyor arxitektura",
+        BaselineTitle:
+          "Baseline logikasi keyin real ML bilan almashtirilishi mumkin.",
       },
 
       demo: {
         title: "Prognoz dashboard",
-        subtitle:
-          "Parametr tanlang va prognoz oling: trend, grafik va xulosa.",
+        subtitle: "Parametr tanlang va prognoz oling: trend, grafik va xulosa.",
         inputs: "Parametrlar",
         category: "Kategoriya",
         product: "Mahsulot",
@@ -539,6 +713,20 @@ const resources = {
         summaryTitle: "AI xulosa",
         placeholder: "Grafik uchun prognozni ishga tushiring",
         failed: "So‘rov xatosi",
+
+        BazaarAITitle:
+          "BazaarAI — Aqlli Mahsulot Narxini Bashorat Qilish Platformasi",
+        VideodaTitle: "Videoda nima ko‘rsatilgan",
+        UshbuTitle:
+          "Ushbu videoda BazaarAI platformasining to‘liq ishlash jarayoni namoyish etiladi. Foydalanuvchi tizimga mahsulot turini (masalan: guruch, bug‘doy, paxta, kartoshka, piyoz, pomidor, go‘sht, sut mahsulotlari, shakar, yog‘, sement, metall va boshqa iste’mol hamda sanoat tovarlari) tanlaydi va tegishli ma’lumotlarni kiritadi. Platforma avtomatik ravishda tarixiy narxlar, savdo hajmi, mavsumiylik, hududiy omillar va bozor dinamikasini tahlil qiladi. AI modeli real vaqt rejimida 7, 30 va 90 kunlik narx prognozini hisoblab, o‘sish yoki pasayish ehtimolini foizlarda ko‘rsatadi, risk darajasini baholaydi va ishonchlilik intervalini taqdim etadi. Shuningdek, vizual grafiklar orqali trend va mavsumiy tebranishlar ko‘rsatiladi.",
+        MuammoTitle: "Muammo va yechim qanday bog‘liq",
+        BozordaTitle:
+          "Bozorda mahsulot narxlarining tez-tez o‘zgarishi savdogarlar va ishlab chiqaruvchilar uchun jiddiy muammo hisoblanadi. Narxning keskin pasayishi zarar keltirishi, noto‘g‘ri vaqtda sotish esa daromadni kamaytirishi mumkin. Ko‘plab kichik va o‘rta biznes subyektlarida analitik vositalar mavjud emasligi sababli qarorlar subyektiv baholash asosida qabul qilinadi. BazaarAI ushbu muammoni ma’lumotlarga asoslangan prognozlash modeli orqali hal qiladi. Platforma talab va taklif dinamikasi, mavsumiy omillar, logistika xarajatlari hamda makroiqtisodiy ko‘rsatkichlarni hisobga olib, aniqroq va asosli narx bashoratini taqdim etadi. Natijada foydalanuvchilar optimal sotish vaqtini aniqlay oladi, zaxira boshqaruvini yaxshilaydi va moliyaviy risklarni kamaytiradi.",
+        TexnologiyalarTitle: "Texnologiyalar",
+        BazaarAImachineTitle:
+          "BazaarAI machine learning arxitekturasi asosida qurilgan. Gradient Boosting Regressor, Random Forest va LSTM kombinatsiyasi, feature engineering (trend, seasonality, moving average, volatility) qo‘llaniladi. Backend: Python + FastAPI. Data: PostgreSQL. Model: Scikit-learn va TensorFlow. REST API orqali prediction xizmatlari beriladi va vizual analitika modulida grafiklar chiqariladi.",
+        KatalogniTitle:
+          "Katalogni olishda xatolik (categories). Backend Javob bermayapti",
       },
     },
   },

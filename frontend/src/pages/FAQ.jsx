@@ -28,10 +28,10 @@ export default function FAQ() {
       </div>
 
       <div className="grid gap-4 max-w-3xl mx-auto">
-        <Item q="Is this real AI?" a="This is a demo baseline. The UI and API are built to support real ML models later." />
-        <Item q="Where does the data come from?" a="Demo uses curated CSV data. Next step is live ingestion from real sources." />
-        <Item q="Can it predict perfectly?" a="No model is perfect. We provide direction + chart + context." />
-        <Item q="Will you add alerts?" a="Yes. Watchlists and notifications are planned for the real product." />
+        <Item q={t("faq.IsTitle")} a={t("faq.ThisTitle")} />
+        <Item q={t("faq.WhereTitle")} a={t("faq.DemoTitle")} />
+        <Item q={t("faq.CanTitle")} a={t("faq.NoTitle")} />
+        <Item q={t("faq.WillTitle")} a={t("faq.YesTitle")} />
       </div>
 
       <div className="text-center">

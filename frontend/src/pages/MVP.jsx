@@ -24,9 +24,9 @@ export default function MVP() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        <Card title="End-to-end workflow" text="Inputs → analysis → chart + summary." />
-        <Card title="Stable API contract" text="Chart-ready JSON response for UI rendering." />
-        <Card title="Upgradeable architecture" text="Baseline logic can be replaced by real ML later." />
+        <Card title={t("mvp.EndTitle")} text={t("mvp.InputsTitle")} />
+        <Card title={t("mvp.StableTitle")} text={t("mvp.ChartTitle")} />
+        <Card title={t("mvp.UpgradeableTitle")} text={t("mvp.BaselineTitle")} />
       </div>
 
       <div className="text-center">

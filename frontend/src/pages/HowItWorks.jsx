@@ -51,21 +51,13 @@ export default function HowItWorks() {
       <div className="grid lg:grid-cols-2 gap-6">
         <Box
           title={t("how.inputTitle")}
-          items={["Category", "Product", "Region", "Horizon (7/30/90)"]}
+          items={[t("how.CategoryTitle"), t("how.ProductTitle"), t("how.RegionTitle"), t("how.HorizonTitle")]}
         />
         <Box
           title={t("how.outputTitle")}
-          items={["Trend (UP/DOWN/FLAT)", "Chart-ready data", "Summary + recommendation"]}
+          items={[t("how.TrendTitle"), t("how.ChartTitle"), t("how.SummaryTitle")]}
         />
       </div>
-
-      <Glass className="p-8">
-        <h2 className="text-2xl font-bold">{t("how.vsTitle")}</h2>
-        <p className="mt-3 text-white/70 dark:text-white/70 text-black/60 leading-relaxed">
-          Demo proves the end-to-end workflow. Later we connect real-time data sources and plug in ML forecasting models.
-        </p>
-      </Glass>
-
       <div className="text-center">
         <Link to="/demo">
           <PrimaryButton>{t("common.openDemo")}</PrimaryButton>

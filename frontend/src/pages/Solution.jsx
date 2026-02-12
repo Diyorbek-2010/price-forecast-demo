@@ -33,10 +33,16 @@ export default function Solution() {
         <Glass className="p-8">
           <h2 className="text-2xl font-bold">{t("solution.fastTitle")}</h2>
           <p className="mt-3 text-white/70 dark:text-white/70 text-black/60 leading-relaxed">{t("solution.fastText")}</p>
-          <ul className="mt-5 text-sm text-white/70 dark:text-white/70 text-black/60 list-disc list-inside space-y-2">
-            <li>Choose product and region</li>
-            <li>Pick horizon</li>
-            <li>Get chart + trend + summary</li>
+          <ul className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5 border-black/10 bg-white/60 text-black dark:border-white/10 dark:bg-black/20 dark:text-white">
+            <li>
+              {t("solution.ChooseTitle")}
+            </li>
+            <li>
+              {t("solution.PickTitle")}
+            </li>
+            <li>
+              {t("solution.Get_chartTitle")}
+            </li>
           </ul>
         </Glass>
 
@@ -45,12 +51,20 @@ export default function Solution() {
           <p className="mt-3 text-white/70 dark:text-white/70 text-black/60 leading-relaxed">{t("solution.demoText")}</p>
           <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-5
                           border-black/10 bg-white/60 text-black dark:border-white/10 dark:bg-black/20 dark:text-white">
-            <div className="text-sm text-white/60 dark:text-white/60 text-black/60">Planned upgrades</div>
+            <div className="text-sm text-white/60 dark:text-white/60 text-black/60">{t("solution.PlannedTitle")}</div>
             <div className="mt-2 text-sm text-white/70 dark:text-white/70 text-black/60 space-y-2">
-              <div>• Live data ingestion</div>
-              <div>• ML forecasting models</div>
-              <div>• Confidence intervals</div>
-              <div>• Alerts & watchlists</div>
+              <div>
+                •{t("solution.LiveTitle")}
+              </div>
+              <div>
+                •{t("solution.MLTitle")}
+              </div>
+              <div>
+                •{t("solution.ConfidenceTitle")}
+              </div>
+              <div>
+                •{t("solution.AlertsTitle")}
+              </div>
             </div>
           </div>
         </Glass>

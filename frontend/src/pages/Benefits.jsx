@@ -45,11 +45,11 @@ export default function Benefits() {
       <div className="grid lg:grid-cols-2 gap-6">
         <ListCard
           title={t("benefits.households")}
-          items={["Plan shopping with less uncertainty", "Avoid peak prices", "Compare regions quickly"]}
+          items={[t("benefits.PlanTitle"), t("benefits.AvoidTitle"), t("benefits.CompareTitle")]}
         />
         <ListCard
           title={t("benefits.businesses")}
-          items={["Reduce inventory risk", "Choose restock timing", "Monitor key products"]}
+          items={[t("benefits.ReduceTitle"), t("benefits.ChooseTitle"), t("benefits.MonitorTitle")]}
         />
       </div>
 

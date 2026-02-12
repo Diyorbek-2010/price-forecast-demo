@@ -66,6 +66,7 @@ export default function Navbar() {
                 aria-label={t("common.language")}
               >
                 <option value="en">EN</option>
+                <option value="ru">RU</option>
                 <option value="uz">UZ</option>
               </select>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
@@ -41,7 +42,7 @@ const REGION_UZ = {
 };
 function DemoVideo() {
   const YT_EMBED =
-    "https://www.youtube.com/embed/4N-WFXpBjpc?rel=0&modestbranding=1";
+    "https://youtu.be/OFc8AT0w_oQ?si=EAsG_pD5Piek4m9Q";
 
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
@@ -83,44 +84,25 @@ function DemoAnalysis() {
 
       <div className="mt-4 space-y-4">
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">Videoda nima ko‘rsatilgan</h3>
+          <h3 className="text-white font-semibold">
+            {useTranslation().t("demo.BazaarAITitle")}
+          </h3>
           <p className="mt-2 text-white/75 leading-relaxed">
-            Ushbu videoda BazaarAI platformasining to‘liq ishlash jarayoni namoyish etiladi.
-            Foydalanuvchi tizimga mahsulot turini (masalan: guruch, bug‘doy, paxta, kartoshka,
-            piyoz, pomidor, go‘sht, sut mahsulotlari, shakar, yog‘, sement, metall va boshqa
-            iste’mol hamda sanoat tovarlari) tanlaydi va tegishli ma’lumotlarni kiritadi.
-            Platforma avtomatik ravishda tarixiy narxlar, savdo hajmi, mavsumiylik, hududiy
-            omillar va bozor dinamikasini tahlil qiladi. AI modeli real vaqt rejimida 7, 30 va
-            90 kunlik narx prognozini hisoblab, o‘sish yoki pasayish ehtimolini foizlarda
-            ko‘rsatadi, risk darajasini baholaydi va ishonchlilik intervalini taqdim etadi.
-            Shuningdek, vizual grafiklar orqali trend va mavsumiy tebranishlar ko‘rsatiladi.
+            {useTranslation().t("demo.UshbuTitle")}
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">Muammo va yechim qanday bog‘liq</h3>
+          <h3 className="text-white font-semibold">{useTranslation().t("demo.MuammoTitle")}</h3>
           <p className="mt-2 text-white/75 leading-relaxed">
-            Bozorda mahsulot narxlarining tez-tez o‘zgarishi savdogarlar va ishlab chiqaruvchilar
-            uchun jiddiy muammo hisoblanadi. Narxning keskin pasayishi zarar keltirishi,
-            noto‘g‘ri vaqtda sotish esa daromadni kamaytirishi mumkin. Ko‘plab kichik va o‘rta
-            biznes subyektlarida analitik vositalar mavjud emasligi sababli qarorlar subyektiv
-            baholash asosida qabul qilinadi. BazaarAI ushbu muammoni ma’lumotlarga asoslangan
-            prognozlash modeli orqali hal qiladi. Platforma talab va taklif dinamikasi, mavsumiy
-            omillar, logistika xarajatlari hamda makroiqtisodiy ko‘rsatkichlarni hisobga olib,
-            aniqroq va asosli narx bashoratini taqdim etadi. Natijada foydalanuvchilar optimal
-            sotish vaqtini aniqlay oladi, zaxira boshqaruvini yaxshilaydi va moliyaviy risklarni
-            kamaytiradi.
+            {useTranslation().t("demo.BozordaTitle")}
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">Texnologiyalar</h3>
+          <h3 className="text-white font-semibold">{useTranslation().t("demo.TexnologiyalarTitle")}</h3>
           <p className="mt-2 text-white/75 leading-relaxed">
-            BazaarAI machine learning arxitekturasi asosida qurilgan. Gradient Boosting Regressor,
-            Random Forest va LSTM kombinatsiyasi, feature engineering (trend, seasonality, moving average,
-            volatility) qo‘llaniladi. Backend: Python + FastAPI. Data: PostgreSQL. Model: Scikit-learn va
-            TensorFlow. REST API orqali prediction xizmatlari beriladi va vizual analitika modulida grafiklar
-            chiqariladi.
+            {useTranslation().t("demo.BazaarAImachineTitle")}
           </p>
         </div>
       </div>
@@ -281,6 +263,7 @@ function SvgLineChart({ labels, values, color = "#22c55e", height = 320 }) {
 }
 
 export default function Demo() {
+  const { tarjima } = useTranslation();
   // Select options API’dan olinadi
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -307,7 +290,7 @@ export default function Demo() {
         const first = list[0] || "";
         setCategory(first);
       } catch {
-        setErr("Katalogni olishda xatolik (categories). Backend ishlayaptimi?");
+        setErr("Katalogni olishda xatolik (categories). Backend Javob bermayapti");
       }
     })();
   }, []);

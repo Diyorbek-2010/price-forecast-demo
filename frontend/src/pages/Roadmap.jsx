@@ -30,15 +30,15 @@ export default function Roadmap() {
       <div className="grid md:grid-cols-3 gap-6">
         <Column
           title={t("roadmap.phase1")}
-          items={["Curated CSV dataset", "Baseline trend (UP/DOWN/FLAT)", "Dashboard UI + summary", "Stable API contract"]}
+          items={[t("roadmap.CuratedTitle"), t("roadmap.BaselineTitle"), t("roadmap.DashboardTitle"), t("roadmap.StableTitle")]}
         />
         <Column
           title={t("roadmap.phase2")}
-          items={["Automated ingestion", "Cleaning & normalization", "Monitoring & anomaly detection", "Validation pipeline"]}
+          items={[t("roadmap.AutomatedTitle"), t("roadmap.CleaningTitle"), t("roadmap.MonitoringTitle"), t("roadmap.ValidationTitle")]}
         />
         <Column
           title={t("roadmap.phase3")}
-          items={["ML forecasting models", "Confidence intervals", "Explainability", "Alerts & watchlists"]}
+          items={[t("roadmap.MLTitle"), t("roadmap.ConfidenceTitle"), t("roadmap.ExplainabilityTitle"), t("roadmap.AlertsTitle")]}
         />
       </div>
 
