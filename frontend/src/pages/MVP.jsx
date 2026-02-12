@@ -19,7 +19,6 @@ export default function MVP() {
   return (
     <div className="space-y-10">
       <div className="text-center max-w-3xl mx-auto">
-        <div className="text-sm text-white/60 dark:text-white/60 text-black/60">MVP</div>
         <h1 className="mt-4 text-4xl md:text-5xl font-bold">{t("mvp.title")}</h1>
         <p className="mt-4 text-white/70 dark:text-white/70 text-black/60 text-lg">{t("mvp.subtitle")}</p>
       </div>

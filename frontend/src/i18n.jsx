@@ -4,7 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
-      brand: { name: "PriceForecast" },
+      brand: { name: "BazaarAI" },
       nav: {
         home: "Home",
         demo: "Demo",
