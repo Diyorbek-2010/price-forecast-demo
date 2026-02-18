@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import demo from "../assets/Demovideo/DemoVideo.mp4";
+import { t } from "i18next";
 
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
@@ -72,7 +73,7 @@ function DemoAnalysis() {
       style={{ flex: "1 1 auto" }} // ✅ qolgan joy tahlilga
     >
       <h2 className="text-2xl font-semibold text-white">
-        BazaarAI — Aqlli Mahsulot Narxini Bashorat Qilish Platformasi
+        {useTranslation().t("demo.BazaarAITitle")}
       </h2>
 
       <div className="mt-4 space-y-4">
@@ -424,7 +425,7 @@ export default function Demo() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* LEFT */}
           <div className="lg:col-span-2 rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-xl font-semibold text-white">Tanlovlar</h2>
+            <h2 className="text-xl font-semibold text-white">{t("demo.competitionsTitle")}</h2>
 
             <div className="mt-5 space-y-4">
               <div>
@@ -443,7 +444,7 @@ export default function Demo() {
               </div>
 
               <div>
-                <label className="text-sm text-white/70">Mahsulot</label>
+                <label className="text-sm text-white/70">{t("demo.ProductTitle")}</label>
                 <select
                   className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
                   value={product}
@@ -458,7 +459,7 @@ export default function Demo() {
               </div>
 
               <div>
-                <label className="text-sm text-white/70">Hudud</label>
+                <label className="text-sm text-white/70">{t("demo.areaTitle")}</label>
                 <select
                   className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
                   value={region}
@@ -473,7 +474,7 @@ export default function Demo() {
               </div>
 
               <div>
-                <label className="text-sm text-white/70">Muddat (kun)</label>
+                <label className="text-sm text-white/70">{t("demo.DurationTitle")}</label>
                 <input
                   className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
                   type="number"
@@ -483,7 +484,7 @@ export default function Demo() {
                   onChange={(e) => setHorizonDays(e.target.value)}
                 />
                 <p className="mt-2 text-xs text-white/50">
-                  Maslahat: 30 kun demo uchun qulay.
+                  {t("demo.AdviceTitle")}
                 </p>
               </div>
 
@@ -511,12 +512,14 @@ export default function Demo() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-semibold text-white">
-                    Prognoz grafigi
+                    {
+                      t("demo.ForecastTitle")
+                    }
                   </h2>
                   <p className="mt-1 text-white/60 text-sm">
-                    Mahsulot:{" "}
+                    {t("demo.ProductTitle")}:{" "}
                     <b className="text-white">{productLabel(product)}</b> ·
-                    Hudud: <b className="text-white">{regionLabel(region)}</b>
+                    {t("demo.areaTitle")}: <b className="text-white">{regionLabel(region)}</b>
                   </p>
                 </div>
 
@@ -581,9 +584,9 @@ export default function Demo() {
 
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
               <div className="flex items-start justify-between gap-4">
-                <h2 className="text-xl font-semibold text-white">AI xulosa</h2>
+                <h2 className="text-xl font-semibold text-white">{t("demo.aiSummaryTitle")}</h2>
                 <div className="text-sm text-white/70">
-                  Ishonchlilik:{" "}
+                  {t("demo.ReliabilityTitle")}:{" "}
                   <b className="text-white">
                     {Number.isFinite(Number(conf)) ? `${conf}%` : "—"}
                   </b>
@@ -594,7 +597,7 @@ export default function Demo() {
                 <p className="text-white/80">{aiSummary}</p>
 
                 <div className="mt-4">
-                  <div className="text-white font-semibold">Tavsiya</div>
+                  <div className="text-white font-semibold">{t("demo.RecommendationTitle")}</div>
                   <p className="mt-1 text-white/75">{aiRec}</p>
                 </div>
               </div>

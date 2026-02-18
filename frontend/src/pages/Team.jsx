@@ -1,24 +1,31 @@
 import React from "react";
 import Glass from "../components/Glass.jsx";
+import { useTranslation } from "react-i18next";
 
 import fotima from "../assets/team/Fotima.jpg";
 import diyorbek from "../assets/team/Diyorbek.jpg";
 import zaynabbegim from "../assets/team/Zaynabbegim.jpg";
 import nasrullo from "../assets/team/Nasrullo.jpg";
+import { t } from "i18next";
 
 const TEAM = [
   {
     name: "Zaynabbegim Komilovna",
     role: "AI Engineer",
-     
+
     bio: "Time-series prognozlash, feature engineering va model baholash yo‘nalishlarida ishlaydi. Tadqiqot va model iteratsiyalarini tezlashtirishga fokus.",
-    tags: ["Machine Learning", "Deep Learning", "Time-Series", "Model Optimization"],
+    tags: [
+      "Machine Learning",
+      "Deep Learning",
+      "Time-Series",
+      "Model Optimization",
+    ],
     img: zaynabbegim,
   },
   {
     name: "Diyorbek Hikmatullayev",
     role: "Full-Stack Developer",
-     
+
     bio: "React (Vite) + FastAPI asosida mahsulot yaratish, API integratsiya va deploy jarayonlarini (Railway) boshqarish. UI/UX’ni tez va sifatli yig‘adi.",
     tags: ["React (Vite)", "FastAPI", "UI Engineering", "Deployment (Railway)"],
     img: diyorbek,
@@ -26,7 +33,7 @@ const TEAM = [
   {
     name: "Zikirova Fotima",
     role: "Product & Research",
-     
+
     bio: "Bozor tahlili, foydalanuvchi ehtiyojlari va MVP scope. Hujjatlashtirish (PRD/Spec) va kontent strukturasini professional tarzda yuritadi.",
     tags: ["Product Strategy", "Market Research", "MVP Scope", "UX Writing"],
     img: fotima,
@@ -34,7 +41,7 @@ const TEAM = [
   {
     name: "Nasrullo Nutfulloyev",
     role: "Data Analyst",
-     
+
     bio: "Ma’lumotlarni tozalash, trend/seasonality tahlili va metrikalar. Vizual analitika hamda business uchun tushunarli xulosalar tayyorlaydi.",
     tags: ["Data Cleaning", "Seasonality", "Forecast QA", "Dashboards"],
     img: nasrullo,
@@ -42,14 +49,48 @@ const TEAM = [
 ];
 
 export default function Team() {
+  const { t } = useTranslation();
   return (
     <section className="space-y-10">
       <Header />
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
-        {TEAM.map((person) => (
-          <MemberCard key={person.name} person={person} />
-        ))}
+        <MemberCard
+          person={{
+            name: "Zaynabbegim Komilovna",
+            role: t("team.s1userTitle"),
+            bio: t("team.s1userText"),
+            tags: ["Machine Learning", "Deep Learning", "Time-Series", "Model Optimization"],
+            img: zaynabbegim,
+          }}
+        />
+        <MemberCard
+          person={{
+            name: "Diyorbek Hikmatullayev",
+            role: t("team.s4userTitle"),
+            bio: t("team.s4userText"),
+            tags: ["React (Vite)", "FastAPI", "UI Engineering", "Deployment (Railway)"],
+            img: diyorbek,
+          }}
+        />
+        <MemberCard
+          person={{
+            name: "Zikirova Fotima",
+            role: t("team.s3userTitle"),
+            bio: t("team.s3userText"),
+            tags: ["Product Strategy", "Market Research", "MVP Scope", "UX Writing"],
+            img: fotima,
+          }}
+        />
+        <MemberCard
+          person={{
+            name: "Nasrullo Nutfulloyev",
+            role: t("team.s2userTitle"),
+            bio: t("team.s2userText"),
+            tags: ["Data Cleaning", "Seasonality", "Forecast QA", "Dashboards"],
+            img: nasrullo,
+          }}
+        />
       </div>
     </section>
   );
@@ -61,12 +102,12 @@ function Header() {
       <div className="inline-flex items-center gap-3 justify-center">
         <span className="text-2xl">👥</span>
         <h1 className="text-4xl font-semibold bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
-          Bizning jamoa
+          {t("team.title")}
         </h1>
       </div>
 
       <p className="max-w-3xl mx-auto mt-3 text-white/70">
-        2–3 yillik tajribaga ega mutaxassislar: AI, data tahlil, product va full-stack yo‘nalishlarda bir jamoa bo‘lib ishlaymiz.
+        {t("team.subtitle")}
       </p>
     </div>
   );
@@ -102,9 +143,7 @@ function MemberCard({ person }) {
           {person.role}
         </div>
 
-        <p className="mt-3 text-sm leading-6 text-white/70">
-          {person.bio}
-        </p>
+        <p className="mt-3 text-sm leading-6 text-white/70">{person.bio}</p>
 
         {/* tags */}
         <div className="mt-5 w-full grid grid-cols-2 gap-2">
