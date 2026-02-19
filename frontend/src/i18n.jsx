@@ -4,7 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
-      brand: { name: "BazaarAI" },
+      brand: { name: "BozorAI" },
       nav: {
         home: "Home",
         demo: "Demo",
@@ -230,16 +230,16 @@ const resources = {
         placeholder: "Run forecast to view chart",
         failed: "Request failed",
 
-        BazaarAITitle: "BazaarAI — Smart Product Price Forecasting Platform",
+        BozorAITitle: "BozorAI — Smart Product Price Forecasting Platform",
         VideodaTitle: "What is shown in the video",
         UshbuTitle:
-          "This video demonstrates the full workflow of the BazaarAI platform. The user selects a product category (such as rice, wheat, cotton, potatoes, onions, tomatoes, meat, dairy products, sugar, oil, cement, metals and other consumer or industrial goods) and enters the required parameters. The platform automatically analyzes historical prices, trading volumes, seasonality, regional factors and market dynamics. The AI model calculates 7, 30 and 90-day price forecasts in real time, showing the probability of increase or decrease in percentages, assessing risk levels and providing confidence intervals. Visual charts also display trends and seasonal fluctuations.",
+          "This video demonstrates the full workflow of the BozorAI platform. The user selects a product category (such as rice, wheat, cotton, potatoes, onions, tomatoes, meat, dairy products, sugar, oil, cement, metals and other consumer or industrial goods) and enters the required parameters. The platform automatically analyzes historical prices, trading volumes, seasonality, regional factors and market dynamics. The AI model calculates 7, 30 and 90-day price forecasts in real time, showing the probability of increase or decrease in percentages, assessing risk levels and providing confidence intervals. Visual charts also display trends and seasonal fluctuations.",
         MuammoTitle: "How the problem and solution are connected",
         BozordaTitle:
-          "Frequent price fluctuations in the market are a serious challenge for traders and producers. Sharp price drops can lead to losses, while selling at the wrong time can reduce profits. Many small and medium-sized businesses lack analytical tools, so decisions are often made based on subjective judgment. BazaarAI solves this problem with a data-driven forecasting model. The platform analyzes demand and supply dynamics, seasonal factors, logistics costs and macroeconomic indicators to deliver more accurate and reliable price predictions. As a result, users can identify optimal selling times, improve inventory management and reduce financial risks.",
+          "Frequent price fluctuations in the market are a serious challenge for traders and producers. Sharp price drops can lead to losses, while selling at the wrong time can reduce profits. Many small and medium-sized businesses lack analytical tools, so decisions are often made based on subjective judgment. BozorAI solves this problem with a data-driven forecasting model. The platform analyzes demand and supply dynamics, seasonal factors, logistics costs and macroeconomic indicators to deliver more accurate and reliable price predictions. As a result, users can identify optimal selling times, improve inventory management and reduce financial risks.",
         TexnologiyalarTitle: "Technologies",
-        BazaarAImachineTitle:
-          "BazaarAI is built on a modern machine learning architecture. It combines Gradient Boosting Regressor, Random Forest and LSTM models using an ensemble approach to improve forecasting accuracy. Feature engineering includes trend, seasonality, moving averages, volatility and anomaly detection. The backend is developed with Python and FastAPI, and data is stored in PostgreSQL. Models are trained using Scikit-learn and TensorFlow and continuously updated with automated retraining. The system provides real-time predictions via REST API and displays results through a visual analytics module.",
+        BozorAImachineTitle:
+          "BozorAI is built on a modern machine learning architecture. It combines Gradient Boosting Regressor, Random Forest and LSTM models using an ensemble approach to improve forecasting accuracy. Feature engineering includes trend, seasonality, moving averages, volatility and anomaly detection. The backend is developed with Python and FastAPI, and data is stored in PostgreSQL. Models are trained using Scikit-learn and TensorFlow and continuously updated with automated retraining. The system provides real-time predictions via REST API and displays results through a visual analytics module.",
         KatalogniTitle:
           "Catalog loading error (categories). Backend is not responding",
         ForecastTitle:"Forecast graph",
@@ -272,7 +272,7 @@ const resources = {
 
   ru: {
     translation: {
-      brand: { name: "BazaarAi" },
+      brand: { name: "BozorAI" },
       nav: {
         home: "Главная",
         demo: "Демо",
@@ -468,12 +468,12 @@ const resources = {
         title: "Что включает MVP сегодня",
         subtitle:
           "Минимальный end-to-end продукт: данные → API → дашборд. Готов к апгрейду в ML.",
-        EndTitle: "End-to-end workflow",
-        InputsTitle: "Inputs → analysis → chart + summary.",
-        StableTitle: "Stable API contract",
-        ChartTitle: "Chart-ready JSON response for UI rendering.",
-        UpgradeableTitle: "Upgradeable architecture",
-        BaselineTitle: "Baseline logic can be replaced by real ML later.",
+        EndTitle: "Сквозной рабочий процесс",
+        InputsTitle: "Входные данные → анализ → диаграмма + сводка.",
+        StableTitle: "Стабильный контракт API",
+        ChartTitle: "JSON-ответ, готовый для отображения в пользовательском интерфейсе.",
+        UpgradeableTitle: "Модернизируемая архитектура",
+        BaselineTitle: "Базовую логику можно будет заменить реальным машинным обучением позже.",
       },
 
       demo: {
@@ -494,18 +494,18 @@ const resources = {
         summaryTitle: "AI-резюме",
         placeholder: "Нажмите Run forecast чтобы увидеть график",
         failed: "Ошибка запроса",
-        BazaarAITitle:
-          "BazaarAI — Платформа интеллектуального прогнозирования цен на товары",
+        BozorAITitle:
+          "BozorAI — Платформа интеллектуального прогнозирования цен на товары",
 
         VideodaTitle: "Что показано в видео",
         UshbuTitle:
-          "В этом видео демонстрируется полный процесс работы платформы BazaarAI. Пользователь выбирает тип продукта (например: рис, пшеница, хлопок, картофель, лук, помидоры, мясо, молочные продукты, сахар, масло, цемент, металл и другие потребительские и промышленные товары) и вводит необходимые данные. Платформа автоматически анализирует исторические цены, объёмы торговли, сезонность, региональные факторы и рыночную динамику. AI-модель в режиме реального времени рассчитывает прогноз цен на 7, 30 и 90 дней, показывает вероятность роста или падения в процентах, оценивает уровень риска и предоставляет доверительный интервал. Также с помощью визуальных графиков отображаются тренды и сезонные колебания.",
+          "В этом видео демонстрируется полный процесс работы платформы BozorAI. Пользователь выбирает тип продукта (например: рис, пшеница, хлопок, картофель, лук, помидоры, мясо, молочные продукты, сахар, масло, цемент, металл и другие потребительские и промышленные товары) и вводит необходимые данные. Платформа автоматически анализирует исторические цены, объёмы торговли, сезонность, региональные факторы и рыночную динамику. AI-модель в режиме реального времени рассчитывает прогноз цен на 7, 30 и 90 дней, показывает вероятность роста или падения в процентах, оценивает уровень риска и предоставляет доверительный интервал. Также с помощью визуальных графиков отображаются тренды и сезонные колебания.",
         MuammoTitle: "Как связаны проблема и решение",
         BozordaTitle:
-          "Частые изменения цен на рынке являются серьёзной проблемой для продавцов и производителей. Резкое снижение цен может привести к убыткам, а продажа в неподходящий момент — к снижению прибыли. У многих малых и средних бизнесов отсутствуют аналитические инструменты, поэтому решения принимаются на основе субъективных оценок. BazaarAI решает эту проблему с помощью модели прогнозирования на основе данных. Платформа учитывает динамику спроса и предложения, сезонные факторы, логистические расходы и макроэкономические показатели, предоставляя более точный и обоснованный прогноз цен. В результате пользователи могут определить оптимальное время продажи, улучшить управление запасами и снизить финансовые риски.",
+          "Частые изменения цен на рынке являются серьёзной проблемой для продавцов и производителей. Резкое снижение цен может привести к убыткам, а продажа в неподходящий момент — к снижению прибыли. У многих малых и средних бизнесов отсутствуют аналитические инструменты, поэтому решения принимаются на основе субъективных оценок. BozorAI решает эту проблему с помощью модели прогнозирования на основе данных. Платформа учитывает динамику спроса и предложения, сезонные факторы, логистические расходы и макроэкономические показатели, предоставляя более точный и обоснованный прогноз цен. В результате пользователи могут определить оптимальное время продажи, улучшить управление запасами и снизить финансовые риски.",
         TexnologiyalarTitle: "Технологии",
-        BazaarAImachineTitle:
-          "BazaarAI построен на современной архитектуре машинного обучения. Используется комбинация моделей Gradient Boosting Regressor, Random Forest и LSTM с применением ансамблевого подхода для повышения точности прогнозов. На этапе feature engineering выделяются тренды, сезонность, скользящие средние, волатильность и аномалии. Backend разработан на Python и FastAPI, данные хранятся в базе PostgreSQL. Модели обучены с использованием Scikit-learn и TensorFlow и регулярно обновляются через механизм автоматического переобучения. Система предоставляет прогнозы в реальном времени через REST API и отображает результаты в виде визуальной аналитики.",
+        BozorAImachineTitle:
+          "BozorAI построен на современной архитектуре машинного обучения. Используется комбинация моделей Gradient Boosting Regressor, Random Forest и LSTM с применением ансамблевого подхода для повышения точности прогнозов. На этапе feature engineering выделяются тренды, сезонность, скользящие средние, волатильность и аномалии. Backend разработан на Python и FastAPI, данные хранятся в базе PostgreSQL. Модели обучены с использованием Scikit-learn и TensorFlow и регулярно обновляются через механизм автоматического переобучения. Система предоставляет прогнозы в реальном времени через REST API и отображает результаты в виде визуальной аналитики.",
         KatalogniTitle:
           "Ошибка загрузки каталога (categories). Backend не отвечает",
         ForecastTitle: "График прогноза",
@@ -539,7 +539,7 @@ const resources = {
 
   uz: {
     translation: {
-      brand: { name: "BazaarAi" },
+      brand: { name: "BozorAI" },
       nav: {
         home: "Bosh sahifa",
         demo: "Demo",
@@ -600,7 +600,7 @@ const resources = {
         subtitle:
           "Oila va kichik biznes qachon olish, qancha zaxira qilish va narx qayerga ketishini bilmaydi.",
         cards: {
-          aT: "Kutilmagan qimmatlashish",
+          aT: "Kutilmagan narx o‘zgarishlari",
           aD: "Narxlar ogohlantirishsiz keskin oshishi mumkin.",
           bT: "Oddiy prognoz vositasi yo‘q",
           bD: "Ko‘pchilikda tushunarli prognoz yo‘q.",
@@ -763,17 +763,17 @@ const resources = {
         placeholder: "Grafik uchun prognozni ishga tushiring",
         failed: "So‘rov xatosi",
 
-        BazaarAITitle:
-          "BazaarAI — Aqlli Mahsulot Narxini Bashorat Qilish Platformasi",
+        BozorAITitle:
+          "BozorAI — Aqlli Mahsulot Narxini Bashorat Qilish Platformasi",
         VideodaTitle: "Videoda nima ko‘rsatilgan",
         UshbuTitle:
-          "Ushbu videoda BazaarAI platformasining to‘liq ishlash jarayoni namoyish etiladi. Foydalanuvchi tizimga mahsulot turini (masalan: guruch, bug‘doy, paxta, kartoshka, piyoz, pomidor, go‘sht, sut mahsulotlari, shakar, yog‘, sement, metall va boshqa iste’mol hamda sanoat tovarlari) tanlaydi va tegishli ma’lumotlarni kiritadi. Platforma avtomatik ravishda tarixiy narxlar, savdo hajmi, mavsumiylik, hududiy omillar va bozor dinamikasini tahlil qiladi. AI modeli real vaqt rejimida 7, 30 va 90 kunlik narx prognozini hisoblab, o‘sish yoki pasayish ehtimolini foizlarda ko‘rsatadi, risk darajasini baholaydi va ishonchlilik intervalini taqdim etadi. Shuningdek, vizual grafiklar orqali trend va mavsumiy tebranishlar ko‘rsatiladi.",
+          "Ushbu videoda BozorAI platformasining to‘liq ishlash jarayoni namoyish etiladi. Foydalanuvchi tizimga mahsulot turini (masalan: guruch, bug‘doy, paxta, kartoshka, piyoz, pomidor, go‘sht, sut mahsulotlari, shakar, yog‘, sement, metall va boshqa iste’mol hamda sanoat tovarlari) tanlaydi va tegishli ma’lumotlarni kiritadi. Platforma avtomatik ravishda tarixiy narxlar, savdo hajmi, mavsumiylik, hududiy omillar va bozor dinamikasini tahlil qiladi. AI modeli real vaqt rejimida 7, 30 va 90 kunlik narx prognozini hisoblab, o‘sish yoki pasayish ehtimolini foizlarda ko‘rsatadi, risk darajasini baholaydi va ishonchlilik intervalini taqdim etadi. Shuningdek, vizual grafiklar orqali trend va mavsumiy tebranishlar ko‘rsatiladi.",
         MuammoTitle: "Muammo va yechim qanday bog‘liq",
         BozordaTitle:
-          "Bozorda mahsulot narxlarining tez-tez o‘zgarishi savdogarlar va ishlab chiqaruvchilar uchun jiddiy muammo hisoblanadi. Narxning keskin pasayishi zarar keltirishi, noto‘g‘ri vaqtda sotish esa daromadni kamaytirishi mumkin. Ko‘plab kichik va o‘rta biznes subyektlarida analitik vositalar mavjud emasligi sababli qarorlar subyektiv baholash asosida qabul qilinadi. BazaarAI ushbu muammoni ma’lumotlarga asoslangan prognozlash modeli orqali hal qiladi. Platforma talab va taklif dinamikasi, mavsumiy omillar, logistika xarajatlari hamda makroiqtisodiy ko‘rsatkichlarni hisobga olib, aniqroq va asosli narx bashoratini taqdim etadi. Natijada foydalanuvchilar optimal sotish vaqtini aniqlay oladi, zaxira boshqaruvini yaxshilaydi va moliyaviy risklarni kamaytiradi.",
+          "Bozorda mahsulot narxlarining tez-tez o‘zgarishi savdogarlar va ishlab chiqaruvchilar uchun jiddiy muammo hisoblanadi. Narxning keskin pasayishi zarar keltirishi, noto‘g‘ri vaqtda sotish esa daromadni kamaytirishi mumkin. Ko‘plab kichik va o‘rta biznes subyektlarida analitik vositalar mavjud emasligi sababli qarorlar subyektiv baholash asosida qabul qilinadi. BozorAI ushbu muammoni ma’lumotlarga asoslangan prognozlash modeli orqali hal qiladi. Platforma talab va taklif dinamikasi, mavsumiy omillar, logistika xarajatlari hamda makroiqtisodiy ko‘rsatkichlarni hisobga olib, aniqroq va asosli narx bashoratini taqdim etadi. Natijada foydalanuvchilar optimal sotish vaqtini aniqlay oladi, zaxira boshqaruvini yaxshilaydi va moliyaviy risklarni kamaytiradi.",
         TexnologiyalarTitle: "Texnologiyalar",
-        BazaarAImachineTitle:
-          "BazaarAI machine learning arxitekturasi asosida qurilgan. Gradient Boosting Regressor, Random Forest va LSTM kombinatsiyasi, feature engineering (trend, seasonality, moving average, volatility) qo‘llaniladi. Backend: Python + FastAPI. Data: PostgreSQL. Model: Scikit-learn va TensorFlow. REST API orqali prediction xizmatlari beriladi va vizual analitika modulida grafiklar chiqariladi.",
+        BozorAImachineTitle:
+          "BozorAI machine learning arxitekturasi asosida qurilgan. Gradient Boosting Regressor, Random Forest va LSTM kombinatsiyasi, feature engineering (trend, seasonality, moving average, volatility) qo‘llaniladi. Backend: Python + FastAPI. Data: PostgreSQL. Model: Scikit-learn va TensorFlow. REST API orqali prediction xizmatlari beriladi va vizual analitika modulida grafiklar chiqariladi.",
         KatalogniTitle:
           "Katalogni olishda xatolik (categories). Backend Javob bermayapti",
         ForecastTitle:"Prognoz grafigi",
