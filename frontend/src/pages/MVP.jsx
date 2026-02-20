@@ -24,14 +24,20 @@ export default function MVP() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
+        <div className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Card title={t("mvp.EndTitle")} text={t("mvp.InputsTitle")} />
+        </div>
+        <div className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Card title={t("mvp.StableTitle")} text={t("mvp.ChartTitle")} />
+        </div>
+        <div className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Card title={t("mvp.UpgradeableTitle")} text={t("mvp.BaselineTitle")} />
+        </div>
       </div>
 
       <div className="text-center">
         <Link to="/demo">
-          <PrimaryButton>{t("common.openDemo")}</PrimaryButton>
+          <PrimaryButton className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">{t("common.openDemo")}</PrimaryButton>
         </Link>
       </div>
     </div>

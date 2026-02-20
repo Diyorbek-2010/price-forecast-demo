@@ -55,6 +55,7 @@ export default function Team() {
       <Header />
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
+        <div className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">          
         <MemberCard
           person={{
             name: "Zaynabbegim Komilovna",
@@ -64,6 +65,9 @@ export default function Team() {
             img: zaynabbegim,
           }}
         />
+        </div>
+        <div className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
+        
         <MemberCard
           person={{
             name: "Diyorbek Hikmatullayev",
@@ -73,6 +77,8 @@ export default function Team() {
             img: diyorbek,
           }}
         />
+        </div>
+        <div className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <MemberCard
           person={{
             name: "Zikirova Fotima",
@@ -82,6 +88,8 @@ export default function Team() {
             img: fotima,
           }}
         />
+        </div>
+        <div className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <MemberCard
           person={{
             name: "Nasrullo Nutfulloyev",
@@ -91,6 +99,7 @@ export default function Team() {
             img: nasrullo,
           }}
         />
+        </div>
       </div>
     </section>
   );

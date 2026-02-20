@@ -43,24 +43,34 @@ export default function HowItWorks() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Step n="1" title={t("how.step1")} desc={t("how.step1Text")} />
+        </div>
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Step n="2" title={t("how.step2")} desc={t("how.step2Text")} />
+        </div>
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Step n="3" title={t("how.step3")} desc={t("how.step3Text")} />
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Box
           title={t("how.inputTitle")}
-          items={[t("how.CategoryTitle"), t("how.ProductTitle"), t("how.RegionTitle"), t("how.HorizonTitle")]}
+          items={[t("how.CategoryTitle"), t("how.ProductTitle"), t("how.RegionTitle")]}
         />
+        </div>
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Box
           title={t("how.outputTitle")}
           items={[t("how.TrendTitle"), t("how.ChartTitle"), t("how.SummaryTitle")]}
         />
+        </div>
       </div>
       <div className="text-center">
         <Link to="/demo">
-          <PrimaryButton>{t("common.openDemo")}</PrimaryButton>
+          <PrimaryButton className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">{t("common.openDemo")}</PrimaryButton>
         </Link>
       </div>
     </div>

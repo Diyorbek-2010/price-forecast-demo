@@ -61,8 +61,7 @@ export default function Navbar() {
                 value={lang}
                 onChange={onLang}
                 className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white outline-none
-                           dark:border-white/10 dark:bg-black/20
-                           border-black/10 bg-white/60 text-black"
+                           border-black/10 text-black bg-slate-900 text-slate-100 border-slate-700"
                 aria-label={t("common.language")}
               >
                 <option value="en">EN</option>

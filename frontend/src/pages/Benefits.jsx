@@ -37,25 +37,35 @@ export default function Benefits() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Card title={"💸 " + t("benefits.coreA")} text={t("benefits.coreAText")} />
+        </div>
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Card title={"📦 " + t("benefits.coreB")} text={t("benefits.coreBText")} />
+        </div>
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Card title={"🧠 " + t("benefits.coreC")} text={t("benefits.coreCText")} />
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <ListCard
           title={t("benefits.households")}
           items={[t("benefits.PlanTitle"), t("benefits.AvoidTitle"), t("benefits.CompareTitle")]}
         />
+        </div>
+        <div className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <ListCard
           title={t("benefits.businesses")}
           items={[t("benefits.ReduceTitle"), t("benefits.ChooseTitle"), t("benefits.MonitorTitle")]}
         />
+        </div>
       </div>
 
       <div className="text-center">
         <Link to="/demo">
-          <PrimaryButton>{t("common.openDemo")}</PrimaryButton>
+          <PrimaryButton className="overflow-visible  rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">{t("common.openDemo")}</PrimaryButton>
         </Link>
       </div>
     </div>

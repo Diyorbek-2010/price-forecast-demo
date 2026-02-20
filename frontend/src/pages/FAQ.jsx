@@ -28,15 +28,24 @@ export default function FAQ() {
       </div>
 
       <div className="grid gap-4 max-w-3xl mx-auto">
+        <div className="rounded-2xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Item q={t("faq.IsTitle")} a={t("faq.ThisTitle")} />
+        </div>
+        <div className="rounded-2xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Item q={t("faq.WhereTitle")} a={t("faq.DemoTitle")} />
+        </div>
+        <div className="rounded-2xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
+
         <Item q={t("faq.CanTitle")} a={t("faq.NoTitle")} />
+        </div>
+        <div className="rounded-2xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">
         <Item q={t("faq.WillTitle")} a={t("faq.YesTitle")} />
+        </div>
       </div>
 
       <div className="text-center">
         <Link to="/demo">
-          <PrimaryButton>{t("common.openDemo")}</PrimaryButton>
+          <PrimaryButton className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.05] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">{t("common.openDemo")}</PrimaryButton>
         </Link>
       </div>
     </div>

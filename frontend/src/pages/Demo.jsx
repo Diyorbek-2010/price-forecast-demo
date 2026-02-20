@@ -431,7 +431,7 @@ export default function Demo() {
               <div>
                 <label className="text-sm text-white/70">Kategoriya</label>
                 <select
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
+                  className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50 mt-2 w-full rounded-2xl border bg-black/20 px-4 py-3 outline-none bg-slate-900 text-slate-100 border border-slate-700"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                 >
@@ -446,7 +446,7 @@ export default function Demo() {
               <div>
                 <label className="text-sm text-white/70">{t("demo.ProductTitle")}</label>
                 <select
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
+                  className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50 mt-2 w-full rounded-2xl border bg-black/20 px-4 py-3 outline-none bg-slate-900 text-slate-100 border border-slate-700"
                   value={product}
                   onChange={(e) => setProduct(e.target.value)}
                 >
@@ -461,7 +461,7 @@ export default function Demo() {
               <div>
                 <label className="text-sm text-white/70">{t("demo.areaTitle")}</label>
                 <select
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
+                  className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50 mt-2 w-full rounded-2xl border bg-black/20 px-4 py-3 outline-none bg-slate-900 text-slate-100 border border-slate-700"
                   value={region}
                   onChange={(e) => setRegion(e.target.value)}
                 >
@@ -476,7 +476,7 @@ export default function Demo() {
               <div>
                 <label className="text-sm text-white/70">{t("demo.DurationTitle")}</label>
                 <input
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none"
+                  className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50 mt-2 w-full rounded-2xl border bg-black/20 px-4 py-3 outline-none bg-slate-900 text-slate-100 border border-slate-700"
                   type="number"
                   min={7}
                   max={365}
@@ -491,7 +491,7 @@ export default function Demo() {
               <button
                 onClick={onAnalyze}
                 disabled={loading || !category || !product || !region}
-                className="mt-2 w-full rounded-2xl px-5 py-3 font-semibold text-white
+                className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 mt-2 w-full rounded-2xl px-5 py-3 font-semibold text-white
                            bg-gradient-to-r from-fuchsia-500 to-indigo-500
                            disabled:opacity-50 disabled:cursor-not-allowed"
               >
