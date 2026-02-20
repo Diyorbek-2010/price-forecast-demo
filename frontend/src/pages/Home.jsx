@@ -97,7 +97,7 @@ export default function Home() {
         </p>
         <div className="mt-6">
           <Link to="/demo">
-            <PrimaryButton>{t("common.openDemo")}</PrimaryButton>
+            <PrimaryButton className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">{t("common.openDemo")}</PrimaryButton>
           </Link>
         </div>
       </Glass>
