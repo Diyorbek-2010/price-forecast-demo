@@ -4,9 +4,13 @@ import { useTranslation } from "react-i18next";
 import Glass from "../components/Glass";
 import { PrimaryButton, GhostButton } from "../components/Button";
 
+const cardHover =
+  "border border-white/10 rounded-3xl cursor-pointer transition-all duration-300 ease-out " +
+  "hover:scale-[1.03] hover:border-violet-500 hover:shadow-[0_0_15px_#7c3aed,0_0_35px_#7c3aed]";
+
 function Feature({ title, text }) {
   return (
-    <Glass className="p-6">
+    <Glass className={`p-6 ${cardHover}`}>
       <div className="text-lg font-semibold">{title}</div>
       <div className="mt-2 text-sm text-white/70 dark:text-white/70 text-black/60 leading-relaxed">
         {text}
@@ -17,15 +21,16 @@ function Feature({ title, text }) {
 
 function Step({ n, title, text }) {
   return (
-    <Glass className="p-6">
+    <Glass className={`p-6 ${cardHover}`}>
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center font-bold
-                        bg-black/10 border-black/10 dark:bg-white/10 dark:border-white/10">
+        <div className="h-10 w-10 rounded-2xl flex items-center justify-center font-bold border bg-black/10 border-black/10 dark:bg-white/10 dark:border-white/10">
           {n}
         </div>
         <div className="text-lg font-semibold">{title}</div>
       </div>
-      <div className="mt-3 text-sm text-white/70 dark:text-white/70 text-black/60 leading-relaxed">{text}</div>
+      <div className="mt-3 text-sm text-white/70 dark:text-white/70 text-black/60 leading-relaxed">
+        {text}
+      </div>
     </Glass>
   );
 }
@@ -35,9 +40,8 @@ export default function Home() {
 
   return (
     <div className="space-y-10">
-      <Glass className="p-10">
-        <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-white/80
-                        border-black/10 bg-black/5 text-black/70 dark:border-white/10 dark:bg-white/5 dark:text-white/80">
+      <Glass className={`p-10 cursor-default`}>
+        <div className="inline-flex items-center rounded-full border px-4 py-2 text-xs border-black/10 bg-black/5 text-black/70 dark:border-white/10 dark:bg-white/5 dark:text-white/80">
           {t("home.badge")}
         </div>
 
@@ -51,16 +55,16 @@ export default function Home() {
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Link to="/demo">
-            <PrimaryButton>{t("home.ctaPrimary")}</PrimaryButton>
+            <PrimaryButton className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">{t("home.ctaPrimary")}</PrimaryButton>
           </Link>
           <Link to="/problem">
-            <GhostButton>{t("home.ctaSecondary")}</GhostButton>
+            <GhostButton className="rounded-3xl cursor-pointer transition-all duration-300 ease-out hover:scale-[1.02] hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed,0_0_30px_#7c3aed]">{t("home.ctaSecondary")}</GhostButton>
           </Link>
         </div>
       </Glass>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <Glass className="p-8">
+        <Glass className={`p-8 ${cardHover} cursor-default`}>
           <h2 className="text-2xl font-bold">{t("home.section1Title")}</h2>
           <p className="mt-3 text-sm text-white/70 dark:text-white/70 text-black/60 leading-relaxed">
             {t("home.section1Text")}
@@ -75,7 +79,10 @@ export default function Home() {
       </div>
 
       <div>
-        <h2 className="text-2xl md:text-3xl font-bold text-center">{t("home.section3Title")}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-center">
+          {t("home.section3Title")}
+        </h2>
+
         <div className="mt-6 grid md:grid-cols-3 gap-6">
           <Step n="1" title={t("home.step1Title")} text={t("home.step1Text")} />
           <Step n="2" title={t("home.step2Title")} text={t("home.step2Text")} />
@@ -83,7 +90,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Glass className="p-10 text-center">
+      <Glass className={`p-10 text-center cursor-default`}>
         <h3 className="text-3xl font-bold">{t("home.footerTitle")}</h3>
         <p className="mt-3 text-sm text-white/70 dark:text-white/70 text-black/60">
           {t("home.footerText")}
