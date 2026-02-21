@@ -64,11 +64,11 @@ function DemoAnalysis() {
   const { t } = useTranslation();
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-      <h2 className="text-2xl font-semibold text-white">{t("demo.BazaarAITitle")}</h2>
+      <h2 className="text-2xl font-semibold text-white">{t("demo.BozorAITitle")}</h2>
 
       <div className="mt-4 space-y-4">
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">{t("demo.BazaarAITitle")}</h3>
+          <h3 className="text-white font-semibold">{t("demo.BozorAITitle")}</h3>
           <p className="mt-2 text-white/75 leading-relaxed">{t("demo.UshbuTitle")}</p>
         </div>
 
@@ -288,12 +288,6 @@ function CombinedChart({ historyLabels, historyValues, forecastLabels, forecastV
         <span>{labels?.[0] ?? "—"}</span>
         <span>{labels?.[labels.length - 1] ?? "—"}</span>
       </div>
-
-      {join.mode === "forecast-only" && (
-        <div className="px-4 pb-4 text-xs text-amber-200/90">
-          Backend `history` qaytarmadi — hozir faqat forecast chizildi.
-        </div>
-      )}
     </div>
   );
 }
@@ -532,9 +526,6 @@ export default function Demo() {
               <div>
                 <label className="text-sm text-white/70">{t("demo.DurationTitle")} (7/30/90)</label>
                 <DaysToggle value={horizonDays} onChange={setHorizonDays} />
-                <p className="mt-2 text-xs text-white/50">
-                  Eslatma: backend `history_days` 10..365. 7 tanlansa ham history_days=10 yuboriladi (xato chiqmasligi uchun).
-                </p>
               </div>
 
               {/* action */}
