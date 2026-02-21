@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import demo from "../assets/Demovideo/DemoVideo.mp4";
-import { t } from "i18next";
-
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
@@ -24,7 +22,6 @@ const PRODUCT_UZ = {
   milk: "Sut",
   bread: "Non",
   meat: "Go‘sht",
-  // household
   soap: "Sovun",
   detergent: "Kir yuvish kukuni",
   shampoo: "Shampun",
@@ -43,16 +40,12 @@ const REGION_UZ = {
   Khorezm: "Xorazm",
   Karakalpakstan: "Qoraqalpog‘iston",
 };
+
+/* ===================== UI: VIDEO ===================== */
 function DemoVideo() {
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden">
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          minHeight: "520px", // ✅ videoni ko‘zga katta qiladi
-        }}
-      >
+      <div style={{ position: "relative", width: "100%", minHeight: "520px" }}>
         <video
           className="w-full h-full rounded-2xl object-cover"
           src={demo}
@@ -66,50 +59,35 @@ function DemoVideo() {
   );
 }
 
+/* ===================== UI: ANALYSIS BLOCK ===================== */
 function DemoAnalysis() {
+  const { t } = useTranslation();
   return (
-    <div
-      className="rounded-3xl border border-white/10 bg-white/5 p-6"
-      style={{ flex: "1 1 auto" }} // ✅ qolgan joy tahlilga
-    >
-      <h2 className="text-2xl font-semibold text-white">
-        {useTranslation().t("demo.BazaarAITitle")}
-      </h2>
+    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <h2 className="text-2xl font-semibold text-white">{t("demo.BazaarAITitle")}</h2>
 
       <div className="mt-4 space-y-4">
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">
-            {useTranslation().t("demo.BazaarAITitle")}
-          </h3>
-          <p className="mt-2 text-white/75 leading-relaxed">
-            {useTranslation().t("demo.UshbuTitle")}
-          </p>
+          <h3 className="text-white font-semibold">{t("demo.BazaarAITitle")}</h3>
+          <p className="mt-2 text-white/75 leading-relaxed">{t("demo.UshbuTitle")}</p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">
-            {useTranslation().t("demo.MuammoTitle")}
-          </h3>
-          <p className="mt-2 text-white/75 leading-relaxed">
-            {useTranslation().t("demo.BozordaTitle")}
-          </p>
+          <h3 className="text-white font-semibold">{t("demo.MuammoTitle")}</h3>
+          <p className="mt-2 text-white/75 leading-relaxed">{t("demo.BozordaTitle")}</p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-          <h3 className="text-white font-semibold">
-            {useTranslation().t("demo.TexnologiyalarTitle")}
-          </h3>
-          <p className="mt-2 text-white/75 leading-relaxed">
-            {useTranslation().t("demo.BazaarAImachineTitle")}
-          </p>
+          <h3 className="text-white font-semibold">{t("demo.TexnologiyalarTitle")}</h3>
+          <p className="mt-2 text-white/75 leading-relaxed">{t("demo.BazaarAImachineTitle")}</p>
         </div>
       </div>
     </div>
   );
 }
 
+/* ===================== UTIL ===================== */
 function prettyFallback(s) {
-  // unknown kelib qolsa ham chiroyli ko‘rsatish uchun
   const str = String(s ?? "");
   if (!str) return "—";
   return str.replaceAll("_", " ").replace(/\b\w/g, (m) => m.toUpperCase());
@@ -133,8 +111,7 @@ function moneyUZS(n) {
   return new Intl.NumberFormat("uz-UZ").format(x) + " so‘m";
 }
 
-function normalizeForecastValues(valuesRaw) {
-  // backend values float[] bo‘lsa ham, [{predicted_price:...}] bo‘lsa ham ishlaydi
+function normalizeValues(valuesRaw) {
   if (!Array.isArray(valuesRaw)) return [];
   return valuesRaw
     .map((v) => {
@@ -156,83 +133,111 @@ function normalizeForecastValues(valuesRaw) {
 }
 
 function trendStyle(trendRaw) {
-  const t = String(trendRaw || "").toLowerCase();
-  if (t === "up")
-    return {
-      key: "up",
-      label: "OSHDI",
-      color: "#22c55e",
-      dot: "bg-emerald-400",
-    };
-  if (t === "down")
-    return {
-      key: "down",
-      label: "TUSHDI",
-      color: "#ef4444",
-      dot: "bg-rose-400",
-    };
-  return {
-    key: "flat",
-    label: "O‘ZGARMADI",
-    color: "#9ca3af",
-    dot: "bg-slate-300",
-  };
+  const tr = String(trendRaw || "").toLowerCase();
+  if (tr === "up")
+    return { key: "up", label: "OSHDI", color: "#22c55e", dot: "bg-emerald-400" };
+  if (tr === "down")
+    return { key: "down", label: "TUSHDI", color: "#ef4444", dot: "bg-rose-400" };
+  return { key: "flat", label: "O‘ZGARMADI", color: "#9ca3af", dot: "bg-slate-300" };
 }
 
-/**
- * 2) DEPENDENCYSIZ SVG LINE CHART (ishonchli, import muammosi bo‘lmaydi)
- */
-function SvgLineChart({ labels, values, color = "#22c55e", height = 320 }) {
-  const ok =
-    Array.isArray(labels) &&
-    Array.isArray(values) &&
-    labels.length > 1 &&
-    values.length > 1 &&
-    labels.length === values.length;
+function todayISO() {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
 
+/* ===================== CHART: history (grey) + forecast (trend color) ===================== */
+function CombinedChart({ historyLabels, historyValues, forecastLabels, forecastValues, trendKey, height = 320 }) {
   const w = 1000;
   const h = 320;
   const pad = 40;
 
-  const { pathD, minV, maxV } = useMemo(() => {
-    if (!ok) return { pathD: "", minV: 0, maxV: 0 };
-    const minVal = Math.min(...values);
-    const maxVal = Math.max(...values);
-    const range = maxVal - minVal || 1;
+  const historyOk =
+    Array.isArray(historyLabels) &&
+    Array.isArray(historyValues) &&
+    historyLabels.length > 1 &&
+    historyLabels.length === historyValues.length;
 
-    const innerW = w - pad * 2;
-    const innerH = h - pad * 2;
+  const forecastOk =
+    Array.isArray(forecastLabels) &&
+    Array.isArray(forecastValues) &&
+    forecastLabels.length > 1 &&
+    forecastLabels.length === forecastValues.length;
 
-    const pts = values.map((v, i) => {
-      const x = pad + (innerW * i) / (values.length - 1);
-      const y = pad + innerH - (innerH * (v - minVal)) / range;
-      return { x, y };
-    });
-
-    const d = pts
-      .map(
-        (p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`,
-      )
-      .join(" ");
-    return { pathD: d, minV: minVal, maxV: maxVal };
-  }, [ok, values]);
-
-  if (!ok) {
+  if (!historyOk && !forecastOk) {
     return (
-      <div className="h-[320px] flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/70">
-        Grafik uchun ma’lumot kelmadi (labels/values bo‘sh yoki teng emas).
+      <div className="h-[320px] flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/60">
+        Grafik uchun ma’lumot kelmadi (history/forecast yo‘q yoki noto‘g‘ri).
       </div>
     );
   }
 
+  // Join series, remove duplicate join day (history last == forecast first)
+  const join = useMemo(() => {
+    if (historyOk && forecastOk) {
+      const lastH = historyLabels[historyLabels.length - 1];
+      const firstF = forecastLabels[0];
+      const labels =
+        lastH === firstF
+          ? [...historyLabels, ...forecastLabels.slice(1)]
+          : [...historyLabels, ...forecastLabels];
+
+      const values =
+        lastH === firstF
+          ? [...historyValues, ...forecastValues.slice(1)]
+          : [...historyValues, ...forecastValues];
+
+      return {
+        labels,
+        values,
+        splitIndex: historyValues.length - 1, // last history point index
+        mode: "history+forecast",
+      };
+    }
+
+    if (forecastOk) {
+      return { labels: forecastLabels, values: forecastValues, splitIndex: 0, mode: "forecast-only" };
+    }
+
+    // history-only (rare)
+    return { labels: historyLabels, values: historyValues, splitIndex: historyValues.length - 1, mode: "history-only" };
+  }, [historyOk, forecastOk, historyLabels, historyValues, forecastLabels, forecastValues]);
+
+  const labels = join.labels;
+  const values = join.values;
+  const splitIndex = join.splitIndex;
+
+  const minVal = Math.min(...values);
+  const maxVal = Math.max(...values);
+  const range = maxVal - minVal || 1;
+
+  const innerW = w - pad * 2;
+  const innerH = h - pad * 2;
+
+  const pts = values.map((v, i) => {
+    const x = pad + (innerW * i) / (values.length - 1);
+    const y = pad + innerH - (innerH * (v - minVal)) / range;
+    return { x, y };
+  });
+
+  const historyPath = pts
+    .slice(0, Math.min(splitIndex + 1, pts.length))
+    .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`)
+    .join(" ");
+
+  const forecastPts = pts.slice(Math.max(splitIndex, 0));
+  const forecastPath = forecastPts
+    .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`)
+    .join(" ");
+
+  const trend = trendStyle(trendKey);
+
   return (
     <div className="w-full rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
-      <svg
-        viewBox={`0 0 ${w} ${h}`}
-        width="100%"
-        height={height}
-        preserveAspectRatio="none"
-      >
+      <svg viewBox={`0 0 ${w} ${h}`} width="100%" height={height} preserveAspectRatio="none">
         {/* grid */}
         <g opacity="0.25">
           {Array.from({ length: 5 }).map((_, i) => {
@@ -251,10 +256,23 @@ function SvgLineChart({ labels, values, color = "#22c55e", height = 320 }) {
           })}
         </g>
 
+        {/* history: grey */}
+        {historyOk && join.mode !== "forecast-only" && (
+          <path
+            d={historyPath}
+            fill="none"
+            stroke="#9ca3af"
+            strokeWidth="3.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        )}
+
+        {/* forecast: trend color */}
         <path
-          d={pathD}
+          d={forecastPath}
           fill="none"
-          stroke={color}
+          stroke={trend.color}
           strokeWidth="4"
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -262,20 +280,56 @@ function SvgLineChart({ labels, values, color = "#22c55e", height = 320 }) {
       </svg>
 
       <div className="px-4 pb-3 pt-2 flex items-center justify-between text-xs text-white/70">
-        <span>Min: {moneyUZS(minV)}</span>
-        <span>Max: {moneyUZS(maxV)}</span>
+        <span>Min: {moneyUZS(minVal)}</span>
+        <span>Max: {moneyUZS(maxVal)}</span>
       </div>
 
       <div className="px-4 pb-4 flex items-center justify-between text-xs text-white/60">
-        <span>{labels[0]}</span>
-        <span>{labels[labels.length - 1]}</span>
+        <span>{labels?.[0] ?? "—"}</span>
+        <span>{labels?.[labels.length - 1] ?? "—"}</span>
       </div>
+
+      {join.mode === "forecast-only" && (
+        <div className="px-4 pb-4 text-xs text-amber-200/90">
+          Backend `history` qaytarmadi — hozir faqat forecast chizildi.
+        </div>
+      )}
     </div>
   );
 }
 
+/* ===================== DAYS TOGGLE (7/30/90) ===================== */
+function DaysToggle({ value, onChange }) {
+  const opts = [7, 30, 90,180, 365];
+  return (
+    <div className="mt-2 grid grid-cols-3 gap-2">
+      {opts.map((d) => {
+        const active = value === d;
+        return (
+          <button
+            key={d}
+            type="button"
+            onClick={() => onChange(d)}
+            className={[
+              "rounded-xl px-3 py-3 text-sm font-semibold transition-all duration-200",
+              "border",
+              active
+                ? "border-violet-500 bg-violet-500/20 text-white shadow-[0_0_12px_#7c3aed]"
+                : "border-slate-700 bg-slate-900 text-slate-200 hover:border-violet-500 hover:shadow-[0_0_10px_#7c3aed]",
+            ].join(" ")}
+          >
+            {d} kun
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ===================== MAIN PAGE ===================== */
 export default function Demo() {
-  const { tarjima } = useTranslation();
+  const { t } = useTranslation();
+
   // Select options API’dan olinadi
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -286,7 +340,13 @@ export default function Demo() {
   const [product, setProduct] = useState("");
   const [region, setRegion] = useState("");
 
+  // 7/30/90
   const [horizonDays, setHorizonDays] = useState(30);
+
+  // NEW backend requires date + mode
+  const [date, setDate] = useState(todayISO());
+  const [mode, setMode] = useState("forecast");
+
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const [result, setResult] = useState(null);
@@ -302,9 +362,7 @@ export default function Demo() {
         const first = list[0] || "";
         setCategory(first);
       } catch {
-        setErr(
-          "Katalogni olishda xatolik (categories). Backend Javob bermayapti",
-        );
+        setErr("Katalogni olishda xatolik (categories). Backend javob bermayapti.");
       }
     })();
   }, []);
@@ -314,9 +372,7 @@ export default function Demo() {
     if (!category) return;
     (async () => {
       try {
-        const r = await fetch(
-          `${API_BASE}/catalog/products?category=${encodeURIComponent(category)}`,
-        );
+        const r = await fetch(`${API_BASE}/catalog/products?category=${encodeURIComponent(category)}`);
         const data = await r.json();
         const list = Array.isArray(data) ? data : [];
         setProducts(list);
@@ -334,7 +390,7 @@ export default function Demo() {
     (async () => {
       try {
         const r = await fetch(
-          `${API_BASE}/catalog/regions?category=${encodeURIComponent(category)}&product=${encodeURIComponent(product)}`,
+          `${API_BASE}/catalog/regions?category=${encodeURIComponent(category)}&product=${encodeURIComponent(product)}`
         );
         const data = await r.json();
         const list = Array.isArray(data) ? data : [];
@@ -347,15 +403,23 @@ export default function Demo() {
     })();
   }, [category, product]);
 
-  const trend = trendStyle(result?.forecast?.trend);
-  const forecastLabels = result?.forecast?.labels ?? [];
-  const forecastValues = normalizeForecastValues(
-    result?.forecast?.values ?? [],
-  );
-  const canDraw =
-    Array.isArray(forecastLabels) &&
-    forecastLabels.length > 1 &&
-    forecastLabels.length === forecastValues.length;
+  // Derived series from backend response (supports multiple possible formats)
+  const trend = trendStyle(result?.forecast?.trend ?? result?.trend);
+
+  const historyLabels = result?.history?.labels ?? result?.history_labels ?? [];
+  const historyValues = normalizeValues(result?.history?.values ?? result?.history_values ?? []);
+
+  const forecastLabels = result?.forecast?.labels ?? result?.forecast_labels ?? [];
+  const forecastValues = normalizeValues(result?.forecast?.values ?? result?.forecast_values ?? []);
+
+  // Summaries
+  const aiSummary = result?.ai?.summary || result?.ai_summary || "—";
+  const aiRec = result?.ai?.recommendation || result?.ai_recommendation || "—";
+  const conf = result?.ai?.confidence ?? result?.ai_confidence;
+
+  const lastPrice = result?.summary?.last_price ?? result?.last_price;
+  const endForecast = result?.summary?.end_forecast ?? result?.end_forecast;
+  const changePct = result?.summary?.change_pct ?? result?.change_pct;
 
   async function onAnalyze() {
     setErr("");
@@ -363,12 +427,18 @@ export default function Demo() {
     setResult(null);
 
     try {
+      // backend validation: history_days 10..365 bo‘lsin
+      const safeHistoryDays = Math.min(365, Math.max(10, Number(horizonDays) || 30));
+      const safeHorizonDays = Number(horizonDays) || 30;
+
       const payload = {
+        mode, // swagger’da bor
         category,
         product,
         region,
-        horizon_days: Number(horizonDays) || 30,
-        history_days: 60,
+        date, // swagger’da bor (YYYY-MM-DD)
+        horizon_days: safeHorizonDays,
+        history_days: safeHistoryDays,
       };
 
       const res = await fetch(`${API_BASE}/analyze`, {
@@ -380,8 +450,7 @@ export default function Demo() {
       const data = await res.json();
 
       if (!res.ok || data?.error) {
-        setErr(data?.message || "Server xatosi");
-        setLoading(false);
+        setErr(data?.detail?.[0]?.msg || data?.message || "Server xatosi");
         return;
       }
 
@@ -393,33 +462,17 @@ export default function Demo() {
     }
   }
 
-  const aiSummary = result?.ai?.summary || "—";
-  const aiRec = result?.ai?.recommendation || "—";
-  const conf = result?.ai?.confidence;
-
-  const lastPrice = result?.summary?.last_price;
-  const endForecast = result?.summary?.end_forecast;
-  const changePct = result?.summary?.change_pct;
-
   return (
     <div className="min-h-[calc(100vh-80px)] px-4 py-10">
       <div className="mx-auto max-w-6xl">
-        <section className="mb-10">
-          <div className="grid gap-6 lg:grid-cols-12 items-start">
-            <div className="lg:col-span-full">
-              <DemoVideo />
-            </div>
-
-            <div className="lg:col-span-full">
-              <DemoAnalysis />
-            </div>
-          </div>
+        {/* TOP */}
+        <section className="mb-10 space-y-6">
+          <DemoVideo />
+          <DemoAnalysis />
         </section>
 
         <div className="mb-6">
-          <h1 className="text-3xl md:text-4xl font-semibold text-white">
-            Demo
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-semibold text-white">Demo</h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -428,10 +481,11 @@ export default function Demo() {
             <h2 className="text-xl font-semibold text-white">{t("demo.competitionsTitle")}</h2>
 
             <div className="mt-5 space-y-4">
+              {/* category */}
               <div>
                 <label className="text-sm text-white/70">Kategoriya</label>
                 <select
-                  className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50 mt-2 w-full rounded-2xl border bg-black/20 px-4 py-3 outline-none bg-slate-900 text-slate-100 border border-slate-700"
+                  className="mt-2 w-full rounded-2xl border bg-slate-900 text-slate-100 border-slate-700 px-4 py-3 outline-none transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                 >
@@ -443,10 +497,11 @@ export default function Demo() {
                 </select>
               </div>
 
+              {/* product */}
               <div>
                 <label className="text-sm text-white/70">{t("demo.ProductTitle")}</label>
                 <select
-                  className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50 mt-2 w-full rounded-2xl border bg-black/20 px-4 py-3 outline-none bg-slate-900 text-slate-100 border border-slate-700"
+                  className="mt-2 w-full rounded-2xl border bg-slate-900 text-slate-100 border-slate-700 px-4 py-3 outline-none transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50"
                   value={product}
                   onChange={(e) => setProduct(e.target.value)}
                 >
@@ -458,10 +513,11 @@ export default function Demo() {
                 </select>
               </div>
 
+              {/* region */}
               <div>
                 <label className="text-sm text-white/70">{t("demo.areaTitle")}</label>
                 <select
-                  className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50 mt-2 w-full rounded-2xl border bg-black/20 px-4 py-3 outline-none bg-slate-900 text-slate-100 border border-slate-700"
+                  className="mt-2 w-full rounded-2xl border bg-slate-900 text-slate-100 border-slate-700 px-4 py-3 outline-none transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50"
                   value={region}
                   onChange={(e) => setRegion(e.target.value)}
                 >
@@ -472,27 +528,22 @@ export default function Demo() {
                   ))}
                 </select>
               </div>
-
+              {/* 7/30/90 */}
               <div>
-                <label className="text-sm text-white/70">{t("demo.DurationTitle")}</label>
-                <input
-                  className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/50 mt-2 w-full rounded-2xl border bg-black/20 px-4 py-3 outline-none bg-slate-900 text-slate-100 border border-slate-700"
-                  type="number"
-                  min={7}
-                  max={365}
-                  value={horizonDays}
-                  onChange={(e) => setHorizonDays(e.target.value)}
-                />
+                <label className="text-sm text-white/70">{t("demo.DurationTitle")} (7/30/90)</label>
+                <DaysToggle value={horizonDays} onChange={setHorizonDays} />
                 <p className="mt-2 text-xs text-white/50">
-                  {t("demo.AdviceTitle")}
+                  Eslatma: backend `history_days` 10..365. 7 tanlansa ham history_days=10 yuboriladi (xato chiqmasligi uchun).
                 </p>
               </div>
 
+              {/* action */}
               <button
                 onClick={onAnalyze}
-                disabled={loading || !category || !product || !region}
-                className="bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 mt-2 w-full rounded-2xl px-5 py-3 font-semibold text-white
+                disabled={loading || !category || !product || !region || !date}
+                className="mt-2 w-full rounded-2xl px-5 py-3 font-semibold text-white transition-all duration-300
                            bg-gradient-to-r from-fuchsia-500 to-indigo-500
+                           hover:shadow-lg hover:shadow-violet-500/30
                            disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Hisoblanmoqda..." : "Prognoz qilish"}
@@ -508,35 +559,34 @@ export default function Demo() {
 
           {/* RIGHT */}
           <div className="lg:col-span-3 space-y-6">
+            {/* Chart card */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-white">
-                    {
-                      t("demo.ForecastTitle")
-                    }
-                  </h2>
+                  <h2 className="text-xl font-semibold text-white">{t("demo.ForecastTitle")}</h2>
                   <p className="mt-1 text-white/60 text-sm">
-                    {t("demo.ProductTitle")}:{" "}
-                    <b className="text-white">{productLabel(product)}</b> ·
+                    {t("demo.ProductTitle")}: <b className="text-white">{productLabel(product)}</b> ·{" "}
                     {t("demo.areaTitle")}: <b className="text-white">{regionLabel(region)}</b>
+                  </p>
+                  <p className="mt-1 text-white/50 text-xs">
+                    Sana: <b className="text-white">{date}</b> · Horizon: <b className="text-white">{horizonDays} kun</b>
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2">
                   <span className={`h-2.5 w-2.5 rounded-full ${trend.dot}`} />
-                  <span className="text-sm text-white/80">
-                    Trend: {trend.label}
-                  </span>
+                  <span className="text-sm text-white/80">Trend: {trend.label}</span>
                 </div>
               </div>
 
               <div className="mt-5">
                 {result ? (
-                  <SvgLineChart
-                    labels={forecastLabels}
-                    values={forecastValues}
-                    color={trend.color}
+                  <CombinedChart
+                    historyLabels={historyLabels}
+                    historyValues={historyValues}
+                    forecastLabels={forecastLabels}
+                    forecastValues={forecastValues}
+                    trendKey={result?.forecast?.trend ?? result?.trend}
                     height={320}
                   />
                 ) : (
@@ -545,33 +595,19 @@ export default function Demo() {
                   </div>
                 )}
 
-                {result && !canDraw && (
-                  <div className="mt-3 text-xs text-amber-200/90">
-                    Diqqat: forecast.labels va forecast.values uzunligi teng
-                    emas yoki values ichidan son topilmadi.
-                  </div>
-                )}
-
                 {result && (
                   <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
                     <div className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="text-white/50">So‘nggi narx</div>
-                      <div className="mt-1 text-white font-semibold">
-                        {moneyUZS(lastPrice)}
-                      </div>
+                      <div className="mt-1 text-white font-semibold">{moneyUZS(lastPrice)}</div>
                     </div>
                     <div className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="text-white/50">Prognoz yakuni</div>
-                      <div className="mt-1 text-white font-semibold">
-                        {moneyUZS(endForecast)}
-                      </div>
+                      <div className="mt-1 text-white font-semibold">{moneyUZS(endForecast)}</div>
                     </div>
                     <div className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="text-white/50">O‘zgarish</div>
-                      <div
-                        className="mt-1 font-semibold"
-                        style={{ color: trend.color }}
-                      >
+                      <div className="mt-1 font-semibold" style={{ color: trend.color }}>
                         {typeof changePct === "number"
                           ? `${changePct > 0 ? "+" : ""}${changePct.toFixed(2)}%`
                           : "—"}
@@ -582,14 +618,13 @@ export default function Demo() {
               </div>
             </div>
 
+            {/* AI card */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
               <div className="flex items-start justify-between gap-4">
                 <h2 className="text-xl font-semibold text-white">{t("demo.aiSummaryTitle")}</h2>
                 <div className="text-sm text-white/70">
                   {t("demo.ReliabilityTitle")}:{" "}
-                  <b className="text-white">
-                    {Number.isFinite(Number(conf)) ? `${conf}%` : "—"}
-                  </b>
+                  <b className="text-white">{Number.isFinite(Number(conf)) ? `${conf}%` : "—"}</b>
                 </div>
               </div>
 
